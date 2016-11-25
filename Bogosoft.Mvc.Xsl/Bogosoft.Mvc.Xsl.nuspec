@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<authors>Clayton Roth</authors>
+		<description>XSLT-related components for ASP.NET MVC 5.</description>
+		<frameworkAssemblies>
+			<frameworkAssembly assemblyName="System.Web" targetFramework="net40" />
+		</frameworkAssemblies>
+		<id>Bogosoft.Mvc.Xsl</id>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<version>1.0.0</version>
+	</metadata>
+</package>
