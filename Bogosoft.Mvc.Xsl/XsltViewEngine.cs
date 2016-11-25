@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bogosoft.Xml;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -7,7 +8,9 @@ using System.Xml.Xsl;
 
 namespace Bogosoft.Mvc.Xsl
 {
-    /// <summary>An implementation of <see cref="IViewEngine"/> that uses XSLT to render model projections.</summary>
+    /// <summary>
+    /// An implementation of <see cref="IViewEngine"/> that uses XSLT to render model projections.
+    /// </summary>
     public class XsltViewEngine : VirtualPathProviderViewEngine
     {
         /// <summary>
@@ -18,12 +21,12 @@ namespace Bogosoft.Mvc.Xsl
         protected readonly NameValueCollection DefaultParameters;
 
         /// <summary>Get or set the current engine's formatter.</summary>
-        protected IFormat Formatter;
+        protected XmlFormatter Formatter;
 
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
         /// <param name="locations">A collection of location formats.</param>
-        /// <param name="formatter">An implementation of <see cref="IFormat"/> to use when rendering.</param>
-        public XsltViewEngine(IEnumerable<String> locations, IFormat formatter)
+        /// <param name="formatter">An <see cref="XmlFormatter"/> to use when rendering.</param>
+        public XsltViewEngine(IEnumerable<String> locations, XmlFormatter formatter)
         {
             this.Formatter = formatter;
 
@@ -32,14 +35,14 @@ namespace Bogosoft.Mvc.Xsl
 
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
         /// <param name="locations">A collection of location formats.</param>
-        /// <param name="formatter">An implementation of <see cref="IFormat"/> to use when rendering.</param>
+        /// <param name="formatter">An <see cref="XmlFormatter"/> to use when rendering.</param>
         /// <param name="settings">
         /// A collection of settings which will be used to populate a collection of default arguments.
         /// This could come from the AppSettings property of the ConfigurationManager class, for instance. 
         /// </param>
         public XsltViewEngine(
             IEnumerable<String> locations,
-            IFormat formatter,
+            XmlFormatter formatter,
             NameValueCollection settings
             )
         {
@@ -54,7 +57,10 @@ namespace Bogosoft.Mvc.Xsl
         /// <param name="context">A controller context.</param>
         /// <param name="path">A partial path for the new partial view.</param>
         /// <returns>A new instance of <see cref="IView"/>.</returns>
-        /// <remarks>This method simply redirects to <see cref="XsltViewEngine.CreateView(ControllerContext, String, String)"/>.</remarks>
+        /// <remarks>
+        /// This method simply redirects to
+        /// <see cref="XsltViewEngine.CreateView(ControllerContext, String, String)"/>.
+        /// </remarks>
         protected override IView CreatePartialView(ControllerContext context, String path)
         {
             return this.CreateView(context, path, null);
@@ -66,7 +72,7 @@ namespace Bogosoft.Mvc.Xsl
         /// <param name="context">A <see cref="ControllerContext"/>.</param>
         /// <param name="path">A path to a view.</param>
         /// <param name="ignored">This parameters is not used.</param>
-        /// <returns></returns>
+        /// <returns>A new instance of <see cref="IView"/>.</returns>
         protected override IView CreateView(ControllerContext context, String path, String ignored)
         {
             if (path.StartsWith("~"))

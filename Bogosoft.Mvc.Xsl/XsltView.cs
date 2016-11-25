@@ -1,10 +1,8 @@
-﻿using Bogosoft.Data;
+﻿using Bogosoft.Mapping;
+using Bogosoft.Xml;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Xsl;
@@ -14,12 +12,12 @@ namespace Bogosoft.Mvc.Xsl
     internal class XsltView : IView
     {
         protected IDictionary<String, Object> Parameters;
-        protected IFormat Formatter;
+        protected XmlFormatter Formatter;
         protected XslCompiledTransform Processor;
 
         internal XsltView(
             XslCompiledTransform processor,
-            IFormat formatter,
+            XmlFormatter formatter,
             IDictionary<String, Object> parameters
             )
         {
