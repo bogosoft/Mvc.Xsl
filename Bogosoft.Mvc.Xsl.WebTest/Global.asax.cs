@@ -1,5 +1,6 @@
 ﻿using Bogosoft.Xml.Xhtml5;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -40,12 +41,24 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
             var xslEngine = new XsltViewEngine(
                 GetViewLocations(),
-                new FileXslTransformProvider(),
+                GetXslTransformProvider(),
                 formatter.FormatAsync,
                 DefaultViewParameters
                 );
 
             ViewEngines.Engines.Add(xslEngine);
+        }
+
+        static IXslTransformProvider GetXslTransformProvider()
+        {
+            IXslTransformProvider provider = new FileXslTransformProvider();
+
+            if(ConfigurationManager.AppSettings["CacheXslTransforms"] == "true")
+            {
+                provider = new MemoryCachedXslTransformProvider(provider);
+            }
+
+            return provider;
         }
 
         static IEnumerable<PathFormatter> GetViewLocations()
