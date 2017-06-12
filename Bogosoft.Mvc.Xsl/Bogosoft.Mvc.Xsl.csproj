@@ -32,9 +32,6 @@
     <DocumentationFile>bin\Release\Bogosoft.Mvc.Xsl.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bogosoft.Mapping, Version=1.1.0.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bogosoft.Mapping.1.1.0.9\lib\net452\Bogosoft.Mapping.dll</HintPath>
-    </Reference>
     <Reference Include="Bogosoft.Xml, Version=1.1.2.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bogosoft.Xml.1.1.2.3\lib\net452\Bogosoft.Xml.dll</HintPath>
     </Reference>
