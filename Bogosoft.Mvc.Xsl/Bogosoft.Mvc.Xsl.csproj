@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="PathFormatter.cs" />
     <Compile Include="UnserializableModelException.cs" />
     <Compile Include="XsltView.cs" />
     <Compile Include="XsltViewEngine.cs" />

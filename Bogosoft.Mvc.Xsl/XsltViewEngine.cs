@@ -60,7 +60,7 @@ namespace Bogosoft.Mvc.Xsl
         /// </summary>
         /// <param name="context">A <see cref="ControllerContext"/>.</param>
         /// <param name="path">A path to a view.</param>
-        /// <param name="ignored">This parameters is not used.</param>
+        /// <param name="ignored">This parameter is not used.</param>
         /// <returns>A new instance of <see cref="IView"/>.</returns>
         protected override IView CreateView(ControllerContext context, String path, String ignored)
         {
