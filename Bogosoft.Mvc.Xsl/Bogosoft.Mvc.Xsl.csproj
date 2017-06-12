@@ -35,8 +35,8 @@
     <Reference Include="Bogosoft.Mapping, Version=1.1.0.9, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bogosoft.Mapping.1.1.0.9\lib\net452\Bogosoft.Mapping.dll</HintPath>
     </Reference>
-    <Reference Include="Bogosoft.Xml, Version=1.1.1.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bogosoft.Xml.1.1.1.2\lib\net452\Bogosoft.Xml.dll</HintPath>
+    <Reference Include="Bogosoft.Xml, Version=1.1.2.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogosoft.Xml.1.1.2.3\lib\net452\Bogosoft.Xml.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
