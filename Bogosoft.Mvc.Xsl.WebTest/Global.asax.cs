@@ -55,7 +55,10 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
             if(ConfigurationManager.AppSettings["CacheXslTransforms"] == "true")
             {
-                provider = new MemoryCachedXslTransformProvider(provider);
+                provider = new MemoryCachedXslTransformProvider(
+                    provider,
+                    ConfigurationManager.AppSettings["WatchForChangesInXslts"] == "true"
+                    );
             }
 
             return provider;
