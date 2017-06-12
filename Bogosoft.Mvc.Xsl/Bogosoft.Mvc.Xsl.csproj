@@ -77,8 +77,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="NameValueCollectionExtensions.cs" />
     <Compile Include="UnserializableModelException.cs" />
     <Compile Include="XsltView.cs" />
     <Compile Include="XsltViewEngine.cs" />

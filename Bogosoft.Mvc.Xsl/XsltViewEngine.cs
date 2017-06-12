@@ -1,7 +1,6 @@
 ﻿using Bogosoft.Xml;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Web.Mvc;
 using System.Xml.Xsl;
@@ -18,20 +17,10 @@ namespace Bogosoft.Mvc.Xsl
         /// These are populated on application start and can be overridden with the contents
         /// of a <see cref="ViewDataDictionary"/> object on view creation.
         /// </summary>
-        protected readonly NameValueCollection DefaultParameters;
+        protected readonly IDictionary<string, object> DefaultParameters;
 
-        /// <summary>Get or set the current engine's formatter.</summary>
+        /// <summary>Get or set the current engine's associated formatter.</summary>
         protected XmlFormatterAsync Formatter;
-
-        /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
-        /// <param name="locations">A collection of location formats.</param>
-        /// <param name="formatter">An XML to use when rendering.</param>
-        public XsltViewEngine(IEnumerable<String> locations, XmlFormatterAsync formatter)
-        {
-            Formatter = formatter;
-
-            PartialViewLocationFormats = ViewLocationFormats = locations.ToArray();
-        }
 
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
         /// <param name="locations">A collection of location formats.</param>
@@ -43,10 +32,10 @@ namespace Bogosoft.Mvc.Xsl
         public XsltViewEngine(
             IEnumerable<string> locations,
             XmlFormatterAsync formatter,
-            NameValueCollection settings
+            IDictionary<string, object> settings = null
             )
         {
-            DefaultParameters = settings;
+            DefaultParameters = settings ?? new Dictionary<string, object>();
 
             Formatter = formatter;
 
@@ -84,7 +73,7 @@ namespace Bogosoft.Mvc.Xsl
 
             processor.Load(path);
 
-            return new XsltView(processor, Formatter, DefaultParameters.ToDictionary());
+            return new XsltView(processor, Formatter, DefaultParameters.Copy());
         }
     }
 }
