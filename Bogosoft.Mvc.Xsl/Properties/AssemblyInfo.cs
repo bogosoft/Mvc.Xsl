@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Bogosoft.Mvc.Xsl")]
-[assembly: AssemblyDescription("XSLT-related components for ASP.NET MVC 5. ")]
+[assembly: AssemblyDescription("XSLT-related components for ASP.NET MVC 5.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Clayton Roth")]
 [assembly: AssemblyProduct("Bogosoft.Mvc.Xsl")]
