@@ -1,6 +1,6 @@
 ﻿using Bogosoft.Xml;
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using System.Xml.Xsl;
@@ -10,7 +10,7 @@ namespace Bogosoft.Mvc.Xsl
     /// <summary>
     /// An implementation of <see cref="IViewEngine"/> that uses XSLT to render model projections.
     /// </summary>
-    public class XsltViewEngine : VirtualPathProviderViewEngine
+    public class XsltViewEngine : IViewEngine
     {
         /// <summary>
         /// Get the default argument dictionary of the current view engine.
@@ -22,58 +22,115 @@ namespace Bogosoft.Mvc.Xsl
         /// <summary>Get or set the current engine's associated formatter.</summary>
         protected XmlFormatterAsync Formatter;
 
+        /// <summary>
+        /// Get or set a collection of locations as filepath formatters.
+        /// </summary>
+        protected PathFormatter[] Locations;
+
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
-        /// <param name="locations">A collection of location formats.</param>
-        /// <param name="formatter">An XML to use when rendering.</param>
-        /// <param name="settings">
-        /// A collection of settings which will be used to populate a collection of default arguments.
-        /// This could come from the AppSettings property of the ConfigurationManager class, for instance. 
+        /// <param name="locations">A collection of filepath formatters.</param>
+        /// <param name="formatter">An XML formatter to use when rendering.</param>
+        /// <param name="defaultParameters">
+        /// A collection of default parameters which will be provided to any view that is created.
+        /// These parameters are overridden by any parameters set in the controller.
         /// </param>
         public XsltViewEngine(
-            IEnumerable<string> locations,
-            XmlFormatterAsync formatter,
-            IDictionary<string, object> settings = null
+            IEnumerable<PathFormatter> locations,
+            XmlFormatterAsync formatter = null,
+            IDictionary<string, object> defaultParameters = null
             )
+            : this(locations.ToArray(), formatter, defaultParameters)
         {
-            DefaultParameters = settings ?? new Dictionary<string, object>();
-
-            Formatter = formatter;
-
-            PartialViewLocationFormats = ViewLocationFormats = locations.ToArray();
         }
 
-        /// <summary>Creates the specified partial view by using the specified controller context.</summary>
-        /// <param name="context">A controller context.</param>
-        /// <param name="path">A partial path for the new partial view.</param>
-        /// <returns>A new instance of <see cref="IView"/>.</returns>
-        /// <remarks>
-        /// This method simply redirects to
-        /// <see cref="CreateView(ControllerContext, String, String)"/>.
-        /// </remarks>
-        protected override IView CreatePartialView(ControllerContext context, String path)
+        /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
+        /// <param name="locations">A collection of filepath formatters.</param>
+        /// <param name="formatter">An XML formatter to use when rendering.</param>
+        /// <param name="defaultParameters">
+        /// A collection of default parameters which will be provided to any view that is created.
+        /// These parameters are overridden by any parameters set in the controller.
+        /// </param>
+        public XsltViewEngine(
+            PathFormatter[] locations,
+            XmlFormatterAsync formatter = null,
+            IDictionary<string, object> defaultParameters = null
+            )
         {
-            return CreateView(context, path, null);
+            DefaultParameters = defaultParameters ?? new Dictionary<string, object>();
+            Formatter = formatter;
+            Locations = locations;
         }
 
         /// <summary>
-        /// Creates the specified view by using a <see cref="ControllerContext"/> and the path to the view.
+        /// Finds the specified partial view by using the specified controller context.
         /// </summary>
-        /// <param name="context">A <see cref="ControllerContext"/>.</param>
-        /// <param name="path">A path to a view.</param>
-        /// <param name="ignored">This parameter is not used.</param>
-        /// <returns>A new instance of <see cref="IView"/>.</returns>
-        protected override IView CreateView(ControllerContext context, String path, String ignored)
+        /// <param name="context">A controller context.</param>
+        /// <param name="name">The name of a partial view.</param>
+        /// <param name="useCache">Unused.</param>
+        /// <returns>
+        /// A successful result that either contains a view, or failed result which
+        /// contains a list of all locations searched.
+        /// </returns>
+        public ViewEngineResult FindPartialView(ControllerContext context, string name, bool useCache)
         {
-            if (path.StartsWith("~"))
+            return FindView(context, name, null, useCache);
+        }
+
+        /// <summary>
+        /// Finds the specified partial view by using the specified controller context.
+        /// </summary>
+        /// <param name="context">A controller context.</param>
+        /// <param name="name">The name of a partial view.</param>
+        /// <param name="ignored">Unused.</param>
+        /// <param name="useCache">Unused.</param>
+        /// <returns>
+        /// A successful result that either contains a view, or failed result which
+        /// contains a list of all locations searched.
+        /// </returns>
+        public ViewEngineResult FindView(
+            ControllerContext context,
+            string name,
+            string ignored,
+            bool useCache
+            )
+        {
+            string path;
+
+            List<string> searched = new List<string>();
+
+            foreach (var x in Locations)
             {
-                path = context.HttpContext.Server.MapPath(path);
+                path = x.Invoke(context);
+
+                searched.Add(path);
+
+                if (File.Exists(path))
+                {
+                    var processor = new XslCompiledTransform();
+
+                    processor.Load(path);
+
+                    var view = new XsltView(
+                        processor,
+                        Formatter,
+                        DefaultParameters.Copy()
+                        );
+
+                    return new ViewEngineResult(view, this);
+                }
             }
 
-            var processor = new XslCompiledTransform();
+            return new ViewEngineResult(searched);
+        }
 
-            processor.Load(path);
-
-            return new XsltView(processor, Formatter, DefaultParameters.Copy());
+        /// <summary>
+        /// Releases the specified view by using the specified controller context.
+        /// Not used in the current implementation.
+        /// </summary>
+        /// <param name="context">A controller context.</param>
+        /// <param name="view">A view to release.</param>
+        public void ReleaseView(ControllerContext context, IView view)
+        {
         }
     }
 }

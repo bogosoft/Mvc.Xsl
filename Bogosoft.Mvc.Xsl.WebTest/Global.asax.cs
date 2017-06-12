@@ -8,6 +8,25 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        static readonly Dictionary<string, object> DefaultViewParameters = new Dictionary<string, object>()
+        {
+            { "page-title", "XSL Views Demo" }
+        };
+
+        static string SharedViewPathFormatter(ControllerContext context)
+        {
+            var data = context.RouteData.Values;
+
+            return context.HttpContext.Server.MapPath($"~/Views/Shared/{data["action"]}.xslt");
+        }
+
+        static string StandardViewPathFormatter(ControllerContext context)
+        {
+            var data = context.RouteData.Values;
+
+            return context.HttpContext.Server.MapPath($"~/Views/{data["controller"]}/{data["action"]}.xslt");
+        }
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -19,15 +38,15 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
             var formatter = new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" };
 
-            var xslEngine = new XsltViewEngine(GetViewLocations(), formatter.FormatAsync);
+            var xslEngine = new XsltViewEngine(GetViewLocations(), formatter.FormatAsync, DefaultViewParameters);
 
             ViewEngines.Engines.Add(xslEngine);
         }
 
-        static IEnumerable<string> GetViewLocations()
+        static IEnumerable<PathFormatter> GetViewLocations()
         {
-            yield return "~/Views/Shared/{0}.xslt";
-            yield return "~/Views/{1}/{0}.xslt";
+            yield return StandardViewPathFormatter;
+            yield return SharedViewPathFormatter;
         }
     }
 }

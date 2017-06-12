@@ -58,7 +58,7 @@ namespace Bogosoft.Mvc.Xsl
                 throw new UnserializableModelException(model.GetType());
             }
 
-            foreach(var kv in parameters)
+            foreach(var kv in context.ViewData)
             {
                 parameters[kv.Key] = kv.Value;
             }
