@@ -26,7 +26,7 @@ namespace Bogosoft.Mvc.Xsl
         /// </param>
         /// <param name="watchForChanges">
         /// A value indicating whether or not the current provider is to watch
-        /// for changes in files that correspond to cached XSL transforms.
+        /// for changes in files on a watchable filesystem that correspond to cached XSL transforms.
         /// </param>
         public MemoryCachedXslTransformProvider(IXslTransformProvider source, bool watchForChanges = false)
         {
