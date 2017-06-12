@@ -1,20 +1,19 @@
-﻿using Bogosoft.Mapping;
-using Bogosoft.Xml;
-using System;
+﻿using Bogosoft.Xml;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Xml;
+using System.Xml.XPath;
 using System.Xml.Xsl;
 
 namespace Bogosoft.Mvc.Xsl
 {
     class XsltView : IView
     {
-        protected IDictionary<string, object> Parameters;
-        protected XmlFormatterAsync Formatter;
-        protected XslCompiledTransform Processor;
+        IDictionary<string, object> parameters;
+        XmlFormatterAsync formatter;
+        XslCompiledTransform processor;
 
         internal XsltView(
             XslCompiledTransform processor,
@@ -22,9 +21,9 @@ namespace Bogosoft.Mvc.Xsl
             IDictionary<string, object> parameters
             )
         {
-            Parameters = parameters;
-            Formatter = formatter;
-            Processor = processor;
+            this.parameters = parameters;
+            this.formatter = formatter;
+            this.processor = processor;
         }
 
         public void Render(ViewContext context, TextWriter writer)
@@ -38,40 +37,51 @@ namespace Bogosoft.Mvc.Xsl
 
             token.ThrowIfCancellationRequested();
 
-            XmlDocument source, transformed;
+            IXPathNavigable source;
 
-            // Prepare model
             var model = context.ViewData.Model;
 
-            if (model is XmlDocument)
-            {
-                source = (model as XmlDocument);
-            }
-            else if (model is IMap<Object, XmlDocument>)
-            {
-                source = (model as IMap<Object, XmlDocument>).Map(model);
-            }
-            else
+            if(ReferenceEquals(null, model))
             {
                 source = new XmlDocument();
             }
-
-            // Prepare parameters
-            foreach (var kv in context.ViewData)
+            else if(model is IXmlSerializable)
             {
-                Parameters[kv.Key] = kv.Value;
+                source = (model as IXmlSerializable).Serialize();
+            }
+            else if(model is IEnumerable<IXmlSerializable>)
+            {
+                source = (model as IEnumerable<IXmlSerializable>).Serialize();
+            }
+            else
+            {
+                throw new UnserializableModelException(model.GetType());
+            }
+
+            foreach(var kv in parameters)
+            {
+                parameters[kv.Key] = kv.Value;
             }
 
             var args = new XsltArgumentList();
 
-            foreach (var kv in this.Parameters)
+            foreach (var kv in parameters)
             {
                 args.AddParam(kv.Key, "", kv.Value);
             }
 
+            if(formatter == null)
+            {
+                processor.Transform(source, args, writer);
+
+                return;
+            }
+
+            XmlDocument transformed;
+
             using (var stream = new MemoryStream())
             {
-                Processor.Transform(source, args, stream);
+                processor.Transform(source, args, stream);
 
                 stream.Position = 0;
 
@@ -80,7 +90,7 @@ namespace Bogosoft.Mvc.Xsl
                 transformed.Load(stream);
             }
 
-            await Formatter.Invoke(transformed, writer, token);
+            await formatter.Invoke(transformed, writer, token);
         }
     }
 }

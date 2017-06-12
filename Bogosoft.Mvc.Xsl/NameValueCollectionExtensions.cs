@@ -6,7 +6,7 @@ namespace Bogosoft.Mvc.Xsl
 {
     internal static class NameValueCollectionExtensions
     {
-        internal static IDictionary<String, Object> ToDictionary(this NameValueCollection values)
+        internal static IDictionary<string, object> ToDictionary(this NameValueCollection values)
         {
             var dictionary = new Dictionary<String, Object>();
 
