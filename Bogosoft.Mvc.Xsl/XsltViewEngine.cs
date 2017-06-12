@@ -21,36 +21,36 @@ namespace Bogosoft.Mvc.Xsl
         protected readonly NameValueCollection DefaultParameters;
 
         /// <summary>Get or set the current engine's formatter.</summary>
-        protected XmlFormatter Formatter;
+        protected XmlFormatterAsync Formatter;
 
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
         /// <param name="locations">A collection of location formats.</param>
-        /// <param name="formatter">An <see cref="XmlFormatter"/> to use when rendering.</param>
-        public XsltViewEngine(IEnumerable<String> locations, XmlFormatter formatter)
+        /// <param name="formatter">An XML to use when rendering.</param>
+        public XsltViewEngine(IEnumerable<String> locations, XmlFormatterAsync formatter)
         {
-            this.Formatter = formatter;
+            Formatter = formatter;
 
-            this.PartialViewLocationFormats = this.ViewLocationFormats = locations.ToArray();
+            PartialViewLocationFormats = ViewLocationFormats = locations.ToArray();
         }
 
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
         /// <param name="locations">A collection of location formats.</param>
-        /// <param name="formatter">An <see cref="XmlFormatter"/> to use when rendering.</param>
+        /// <param name="formatter">An XML to use when rendering.</param>
         /// <param name="settings">
         /// A collection of settings which will be used to populate a collection of default arguments.
         /// This could come from the AppSettings property of the ConfigurationManager class, for instance. 
         /// </param>
         public XsltViewEngine(
-            IEnumerable<String> locations,
-            XmlFormatter formatter,
+            IEnumerable<string> locations,
+            XmlFormatterAsync formatter,
             NameValueCollection settings
             )
         {
-            this.DefaultParameters = settings;
+            DefaultParameters = settings;
 
-            this.Formatter = formatter;
+            Formatter = formatter;
 
-            this.PartialViewLocationFormats = this.ViewLocationFormats = locations.ToArray();
+            PartialViewLocationFormats = ViewLocationFormats = locations.ToArray();
         }
 
         /// <summary>Creates the specified partial view by using the specified controller context.</summary>
@@ -59,11 +59,11 @@ namespace Bogosoft.Mvc.Xsl
         /// <returns>A new instance of <see cref="IView"/>.</returns>
         /// <remarks>
         /// This method simply redirects to
-        /// <see cref="XsltViewEngine.CreateView(ControllerContext, String, String)"/>.
+        /// <see cref="CreateView(ControllerContext, String, String)"/>.
         /// </remarks>
         protected override IView CreatePartialView(ControllerContext context, String path)
         {
-            return this.CreateView(context, path, null);
+            return CreateView(context, path, null);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Bogosoft.Mvc.Xsl
 
             processor.Load(path);
 
-            return new XsltView(processor, this.Formatter, this.DefaultParameters.ToDictionary());
+            return new XsltView(processor, Formatter, DefaultParameters.ToDictionary());
         }
     }
 }
