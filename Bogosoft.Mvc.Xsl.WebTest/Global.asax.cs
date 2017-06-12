@@ -38,7 +38,12 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
             var formatter = new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" };
 
-            var xslEngine = new XsltViewEngine(GetViewLocations(), formatter.FormatAsync, DefaultViewParameters);
+            var xslEngine = new XsltViewEngine(
+                GetViewLocations(),
+                new FileXslTransformProvider(),
+                formatter.FormatAsync,
+                DefaultViewParameters
+                );
 
             ViewEngines.Engines.Add(xslEngine);
         }
