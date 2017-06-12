@@ -10,7 +10,7 @@ using System.Xml.Xsl;
 
 namespace Bogosoft.Mvc.Xsl
 {
-    internal class XsltView : IView
+    class XsltView : IView
     {
         protected IDictionary<string, object> Parameters;
         protected XmlFormatterAsync Formatter;
