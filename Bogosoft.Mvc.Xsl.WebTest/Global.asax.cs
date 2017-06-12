@@ -1,31 +1,22 @@
-﻿using Bogosoft.Xml.Xhtml5;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using Autofac;
+using Autofac.Integration.Mvc;
+using Bogosoft.Mvc.Xsl.WebTest.Infrastructure;
+using System;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace Bogosoft.Mvc.Xsl.WebTest
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
-        static readonly Dictionary<string, object> DefaultViewParameters = new Dictionary<string, object>()
+        protected void Application_Disposed(object sender, EventArgs args)
         {
-            { "page-title", "XSL Views Demo" }
-        };
-
-        static string SharedViewPathFormatter(ControllerContext context)
-        {
-            var data = context.RouteData.Values;
-
-            return context.HttpContext.Server.MapPath($"~/Views/Shared/{data["action"]}.xslt");
-        }
-
-        static string StandardViewPathFormatter(ControllerContext context)
-        {
-            var data = context.RouteData.Values;
-
-            return context.HttpContext.Server.MapPath($"~/Views/{data["controller"]}/{data["action"]}.xslt");
+            foreach(var x in Services.Disposables)
+            {
+                x.Dispose();
+            }
         }
 
         protected void Application_Start()
@@ -35,39 +26,17 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+            var builder = new ContainerBuilder();
+
+            builder.RegisterControllers(typeof(MvcApplication).Assembly);
+
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(builder.Build()));
+
             ViewEngines.Engines.Clear();
 
-            var formatter = new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" };
+            ViewEngines.Engines.Add(Services.ViewEngines);
 
-            var xslEngine = new XsltViewEngine(
-                GetViewLocations(),
-                GetXslTransformProvider(),
-                formatter.FormatAsync,
-                DefaultViewParameters
-                );
-
-            ViewEngines.Engines.Add(xslEngine);
-        }
-
-        static IXslTransformProvider GetXslTransformProvider()
-        {
-            IXslTransformProvider provider = new FileXslTransformProvider();
-
-            if(ConfigurationManager.AppSettings["CacheXslTransforms"] == "true")
-            {
-                provider = new MemoryCachedXslTransformProvider(
-                    provider,
-                    ConfigurationManager.AppSettings["WatchForChangesInXslts"] == "true"
-                    );
-            }
-
-            return provider;
-        }
-
-        static IEnumerable<PathFormatter> GetViewLocations()
-        {
-            yield return StandardViewPathFormatter;
-            yield return SharedViewPathFormatter;
+            Disposed += Application_Disposed;
         }
     }
 }
