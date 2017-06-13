@@ -19,6 +19,11 @@ namespace Bogosoft.Mvc.Xsl
         /// </summary>
         protected readonly IDictionary<string, object> DefaultParameters;
 
+        /// <summary>
+        /// Get or set an array of XML filters associated with the current view engine.
+        /// </summary>
+        protected XmlFilterAsync[] Filters;
+
         /// <summary>Get or set the current engine's associated formatter.</summary>
         protected XmlFormatterAsync Formatter;
 
@@ -173,6 +178,78 @@ namespace Bogosoft.Mvc.Xsl
         /// <param name="view">A view to release.</param>
         public void ReleaseView(ControllerContext context, IView view)
         {
+        }
+
+        /// <summary>
+        /// Instruct the current view engine to use a given XML filter before formatting.
+        /// </summary>
+        /// <param name="filter">An XML filter.</param>
+        /// <returns>The current view engine.</returns>
+        public XsltViewEngine Using(IXmlFilter filter)
+        {
+            Filters = new XmlFilterAsync[] { filter.FilterAsync };
+
+            return this;
+        }
+
+        /// <summary>
+        /// Instruct the current view engine to use a given XML filter before formatting.
+        /// </summary>
+        /// <param name="filter">An XML filter.</param>
+        /// <returns>The current view engine.</returns>
+        public XsltViewEngine Using(XmlFilterAsync filter)
+        {
+            Filters = new XmlFilterAsync[] { filter };
+
+            return this;
+        }
+
+        /// <summary>
+        /// Instruct the current view engine to use a given set of XML filters before formatting.
+        /// </summary>
+        /// <param name="filters">A collection of XML filters.</param>
+        /// <returns>The current view engine.</returns>
+        public XsltViewEngine Using(IEnumerable<IXmlFilter> filters)
+        {
+            Filters = filters.Select<IXmlFilter, XmlFilterAsync>(x => x.FilterAsync).ToArray();
+
+            return this;
+        }
+
+        /// <summary>
+        /// Instruct the current view engine to use a given set of XML filters before formatting.
+        /// </summary>
+        /// <param name="filters">A collection of XML filters.</param>
+        /// <returns>The current view engine.</returns>
+        public XsltViewEngine Using(IXmlFilter[] filters)
+        {
+            Filters = filters.Select<IXmlFilter, XmlFilterAsync>(x => x.FilterAsync).ToArray();
+
+            return this;
+        }
+
+        /// <summary>
+        /// Instruct the current view engine to use a given set of XML filters before formatting.
+        /// </summary>
+        /// <param name="filters">A collection of XML filters.</param>
+        /// <returns>The current view engine.</returns>
+        public XsltViewEngine Using(IEnumerable<XmlFilterAsync> filters)
+        {
+            Filters = filters.ToArray();
+
+            return this;
+        }
+
+        /// <summary>
+        /// Instruct the current view engine to use a given set of XML filters before formatting.
+        /// </summary>
+        /// <param name="filters">A collection of XML filters.</param>
+        /// <returns>The current view engine.</returns>
+        public XsltViewEngine Using(XmlFilterAsync[] filters)
+        {
+            Filters = filters;
+
+            return this;
         }
     }
 }
