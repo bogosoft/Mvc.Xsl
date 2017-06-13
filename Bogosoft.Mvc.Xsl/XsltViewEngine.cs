@@ -159,6 +159,7 @@ namespace Bogosoft.Mvc.Xsl
                 {
                     var view = new XsltView(
                         TransformProvider.Invoke(path),
+                        Filters ?? new XmlFilterAsync[0],
                         Formatter,
                         DefaultParameters.Copy()
                         );

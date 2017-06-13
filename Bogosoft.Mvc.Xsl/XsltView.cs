@@ -12,16 +12,19 @@ namespace Bogosoft.Mvc.Xsl
     class XsltView : IView
     {
         IDictionary<string, object> parameters;
+        XmlFilterAsync[] filters;
         XmlFormatterAsync formatter;
         XslCompiledTransform processor;
 
         internal XsltView(
             XslCompiledTransform processor,
+            XmlFilterAsync[] filters,
             XmlFormatterAsync formatter,
             IDictionary<string, object> parameters
             )
         {
             this.parameters = parameters;
+            this.filters = filters;
             this.formatter = formatter;
             this.processor = processor;
         }
@@ -88,6 +91,11 @@ namespace Bogosoft.Mvc.Xsl
                 transformed = new XmlDocument();
 
                 transformed.Load(stream);
+            }
+
+            foreach(var x in filters)
+            {
+                await x.Invoke(transformed, token);
             }
 
             await formatter.Invoke(transformed, writer, token);
