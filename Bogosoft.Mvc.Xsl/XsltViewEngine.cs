@@ -16,7 +16,7 @@ namespace Bogosoft.Mvc.Xsl
         /// These are populated on application start and can be overridden with the contents
         /// of a <see cref="ViewDataDictionary"/> object on view creation.
         /// </summary>
-        protected readonly IDictionary<string, object> DefaultParameters;
+        protected IDictionary<string, object> DefaultParameters = new Dictionary<string, object>();
 
         /// <summary>
         /// Get or set an array of XML filters associated with the current view engine.
@@ -39,74 +39,32 @@ namespace Bogosoft.Mvc.Xsl
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
         /// <param name="locations">A collection of filepath formatters.</param>
         /// <param name="transformProvider">An XSL transform provider.</param>
-        /// <param name="formatter">An XML formatter to use when rendering.</param>
-        /// <param name="defaultParameters">
-        /// A collection of default parameters which will be provided to any view that is created.
-        /// These parameters are overridden by any parameters set in the controller.
-        /// </param>
-        public XsltViewEngine(
-            IEnumerable<PathFormatter> locations,
-            XslTransformProvider transformProvider,
-            XmlFormatterAsync formatter = null,
-            IDictionary<string, object> defaultParameters = null
-            )
-            : this(locations.ToArray(), transformProvider, formatter, defaultParameters)
+        public XsltViewEngine(IEnumerable<PathFormatter> locations, XslTransformProvider transformProvider)
+            : this(locations.ToArray(), transformProvider)
         {
         }
 
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
         /// <param name="locations">A collection of filepath formatters.</param>
         /// <param name="transformProvider">An XSL transform provider.</param>
-        /// <param name="formatter">An XML formatter to use when rendering.</param>
-        /// <param name="defaultParameters">
-        /// A collection of default parameters which will be provided to any view that is created.
-        /// These parameters are overridden by any parameters set in the controller.
-        /// </param>
-        public XsltViewEngine(
-            IEnumerable<PathFormatter> locations,
-            IXslTransformProvider transformProvider,
-            XmlFormatterAsync formatter = null,
-            IDictionary<string, object> defaultParameters = null
-            )
-            : this(locations.ToArray(), transformProvider.Provision, formatter, defaultParameters)
+        public XsltViewEngine(IEnumerable<PathFormatter> locations, IXslTransformProvider transformProvider)
+            : this(locations.ToArray(), transformProvider.Provision)
         {
         }
 
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
         /// <param name="locations">A collection of filepath formatters.</param>
         /// <param name="transformProvider">An XSL transform provider.</param>
-        /// <param name="formatter">An XML formatter to use when rendering.</param>
-        /// <param name="defaultParameters">
-        /// A collection of default parameters which will be provided to any view that is created.
-        /// These parameters are overridden by any parameters set in the controller.
-        /// </param>
-        public XsltViewEngine(
-            PathFormatter[] locations,
-            IXslTransformProvider transformProvider,
-            XmlFormatterAsync formatter = null,
-            IDictionary<string, object> defaultParameters = null
-            )
-            : this(locations, transformProvider.Provision, formatter, defaultParameters)
+        public XsltViewEngine(PathFormatter[] locations, IXslTransformProvider transformProvider)
+            : this(locations, transformProvider.Provision)
         {
         }
 
         /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
         /// <param name="locations">A collection of filepath formatters.</param>
         /// <param name="transformProvider">An XSL transform provider.</param>
-        /// <param name="formatter">An XML formatter to use when rendering.</param>
-        /// <param name="defaultParameters">
-        /// A collection of default parameters which will be provided to any view that is created.
-        /// These parameters are overridden by any parameters set in the controller.
-        /// </param>
-        public XsltViewEngine(
-            PathFormatter[] locations,
-            XslTransformProvider transformProvider,
-            XmlFormatterAsync formatter = null,
-            IDictionary<string, object> defaultParameters = null
-            )
+        public XsltViewEngine(PathFormatter[] locations, XslTransformProvider transformProvider)
         {
-            DefaultParameters = defaultParameters ?? new Dictionary<string, object>();
-            Formatter = formatter;
             Locations = locations;
             TransformProvider = transformProvider;
         }
@@ -272,6 +230,19 @@ namespace Bogosoft.Mvc.Xsl
         public XsltViewEngine Using(XmlFormatterAsync formatter)
         {
             Formatter = formatter;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Instruct the current view engine to pass along a collection of overridable
+        /// parameters to any views that it creates.
+        /// </summary>
+        /// <param name="defaultParameters">A collection of overridable parameters.</param>
+        /// <returns>The current view engine.</returns>
+        public XsltViewEngine With(IDictionary<string, object> defaultParameters)
+        {
+            DefaultParameters = defaultParameters;
 
             return this;
         }
