@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using System.Xml.Xsl;
 
 namespace Bogosoft.Mvc.Xsl
 {
@@ -249,6 +248,30 @@ namespace Bogosoft.Mvc.Xsl
         public XsltViewEngine Using(XmlFilterAsync[] filters)
         {
             Filters = filters;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Instruct the current view engine to use a given XML formatter.
+        /// </summary>
+        /// <param name="formatter">An XML formatter.</param>
+        /// <returns>The current view engine.</returns>
+        public XsltViewEngine Using(IFormatXml formatter)
+        {
+            Formatter = formatter.FormatAsync;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Instruct the current view engine to use a given XML formatter.
+        /// </summary>
+        /// <param name="formatter">An XML formatter.</param>
+        /// <returns>The current view engine.</returns>
+        public XsltViewEngine Using(XmlFormatterAsync formatter)
+        {
+            Formatter = formatter;
 
             return this;
         }
