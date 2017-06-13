@@ -58,7 +58,9 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
             XslTransformProvider = provider.Provision;
 
-            var engine = new XsltViewEngine(ViewLocations, XslTransformProvider);
+            var engine = XsltViewEngine.Create(ViewLocations, XslTransformProvider)
+                                       .Using(XmlFormatter)
+                                       .With(DefaultViewParameters);
 
             ViewEngines = new IViewEngine[] { engine };
         }

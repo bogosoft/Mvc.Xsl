@@ -12,6 +12,42 @@ namespace Bogosoft.Mvc.Xsl
     public class XsltViewEngine : IViewEngine
     {
         /// <summary>
+        /// Create a new instance of an <see cref="XsltViewEngine"/>.
+        /// </summary>
+        /// <param name="locations">A collection of filepath formatters.</param>
+        /// <param name="transformProvider">An XSL transform provider.</param>
+        /// <returns>A new XSLT view engine.</returns>
+        public static XsltViewEngine Create(
+            IEnumerable<PathFormatter> locations,
+            XslTransformProvider transformProvider
+            )
+        {
+            return new XsltViewEngine
+            {
+                Locations = locations.ToArray(),
+                TransformProvider = transformProvider
+            };
+        }
+
+        /// <summary>
+        /// Create a new instance of an <see cref="XsltViewEngine"/>.
+        /// </summary>
+        /// <param name="locations">A collection of filepath formatters.</param>
+        /// <param name="transformProvider">An XSL transform provider.</param>
+        /// <returns>A new XSLT view engine.</returns>
+        public static XsltViewEngine Create(
+            IEnumerable<PathFormatter> locations,
+            IXslTransformProvider transformProvider
+            )
+        {
+            return new XsltViewEngine
+            {
+                Locations = locations.ToArray(),
+                TransformProvider = transformProvider.Provision
+            };
+        }
+
+        /// <summary>
         /// Get the default argument dictionary of the current view engine.
         /// These are populated on application start and can be overridden with the contents
         /// of a <see cref="ViewDataDictionary"/> object on view creation.
@@ -36,37 +72,11 @@ namespace Bogosoft.Mvc.Xsl
         /// </summary>
         protected XslTransformProvider TransformProvider;
 
-        /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
-        /// <param name="locations">A collection of filepath formatters.</param>
-        /// <param name="transformProvider">An XSL transform provider.</param>
-        public XsltViewEngine(IEnumerable<PathFormatter> locations, XslTransformProvider transformProvider)
-            : this(locations.ToArray(), transformProvider)
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        protected XsltViewEngine()
         {
-        }
-
-        /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
-        /// <param name="locations">A collection of filepath formatters.</param>
-        /// <param name="transformProvider">An XSL transform provider.</param>
-        public XsltViewEngine(IEnumerable<PathFormatter> locations, IXslTransformProvider transformProvider)
-            : this(locations.ToArray(), transformProvider.Provision)
-        {
-        }
-
-        /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
-        /// <param name="locations">A collection of filepath formatters.</param>
-        /// <param name="transformProvider">An XSL transform provider.</param>
-        public XsltViewEngine(PathFormatter[] locations, IXslTransformProvider transformProvider)
-            : this(locations, transformProvider.Provision)
-        {
-        }
-
-        /// <summary>Create a new instance of an <see cref="XsltViewEngine"/>.</summary>
-        /// <param name="locations">A collection of filepath formatters.</param>
-        /// <param name="transformProvider">An XSL transform provider.</param>
-        public XsltViewEngine(PathFormatter[] locations, XslTransformProvider transformProvider)
-        {
-            Locations = locations;
-            TransformProvider = transformProvider;
         }
 
         /// <summary>
