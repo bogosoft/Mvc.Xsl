@@ -3,6 +3,10 @@
 	<!-- Imports -->
 	<xsl:import href="../Base.xslt" />
 	<!-- Structural templates -->
+	<xsl:template match="/" mode="html.head.links">
+		<link href="content/bootstrap.min.css" rel="stylesheet" />
+		<link href="content/Site.css" rel="stylesheet" />
+	</xsl:template>
 	<xsl:template match="/" mode="html.body.content.no-model">
 		<p>Hello, World!</p>
 	</xsl:template>
