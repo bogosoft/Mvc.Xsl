@@ -11,5 +11,5 @@ namespace Bogosoft.Mvc.Xsl
     /// <returns>
     /// An <see cref="XslCompiledTransform"/> object.
     /// </returns>
-    public delegate XslCompiledTransform XslTransformProvider(string filepath);
+    public delegate XslCompiledTransform TransformProvider(string filepath);
 }

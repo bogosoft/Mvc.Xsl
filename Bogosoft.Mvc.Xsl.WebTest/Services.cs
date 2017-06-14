@@ -42,21 +42,21 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
         static XmlFormatterAsync XmlFormatter = new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" }.FormatAsync;
 
-        static XslTransformProvider XslTransformProvider;
+        static TransformProvider XslTransformProvider;
 
         static Services()
         {
-            IXslTransformProvider provider = new FileXslTransformProvider();
+            ITransformProvider provider = new FileXslTransformProvider();
 
             if (ConfigurationManager.AppSettings["CacheXslTransforms"] == "true")
             {
-                provider = new MemoryCachedXslTransformProvider(
+                provider = new MemoryCachedTransformProvider(
                     provider,
                     ConfigurationManager.AppSettings["WatchForChangesInXslts"] == "true"
                     );
             }
 
-            XslTransformProvider = provider.Provision;
+            XslTransformProvider = provider.GetTransform;
 
             var engine = XsltViewEngine.Create(ViewLocations, XslTransformProvider)
                                        .Using(XmlFormatter)

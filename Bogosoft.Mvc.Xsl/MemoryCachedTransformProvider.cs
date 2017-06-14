@@ -8,18 +8,18 @@ using System.Xml.Xsl;
 namespace Bogosoft.Mvc.Xsl
 {
     /// <summary>
-    /// An in-memory caching implementation of the <see cref="IXslTransformProvider"/> contract.
+    /// An in-memory caching implementation of the <see cref="ITransformProvider"/> contract.
     /// </summary>
-    public sealed class MemoryCachedXslTransformProvider : IDisposable, IXslTransformProvider
+    public sealed class MemoryCachedTransformProvider : IDisposable, ITransformProvider
     {
         readonly Dictionary<string, XslCompiledTransform> cache;
         ReaderWriterLockSlim @lock = new ReaderWriterLockSlim();
-        IXslTransformProvider source;
+        ITransformProvider source;
         Dictionary<string, FileSystemWatcher> watchers;
         bool watchForChanges;
 
         /// <summary>
-        /// Create a new <see cref="MemoryCachedXslTransformProvider"/> instance.
+        /// Create a new <see cref="MemoryCachedTransformProvider"/> instance.
         /// </summary>
         /// <param name="source">
         /// A source XSL transform provider to cache results from.
@@ -28,7 +28,7 @@ namespace Bogosoft.Mvc.Xsl
         /// A value indicating whether or not the current provider is to watch
         /// for changes in files on a watchable filesystem that correspond to cached XSL transforms.
         /// </param>
-        public MemoryCachedXslTransformProvider(IXslTransformProvider source, bool watchForChanges = false)
+        public MemoryCachedTransformProvider(ITransformProvider source, bool watchForChanges = false)
         {
             this.source = source;
 
@@ -76,7 +76,7 @@ namespace Bogosoft.Mvc.Xsl
         /// <returns>
         /// An <see cref="XslCompiledTransform"/> object.
         /// </returns>
-        public XslCompiledTransform Provision(string filepath)
+        public XslCompiledTransform GetTransform(string filepath)
         {
             @lock.EnterUpgradeableReadLock();
 
@@ -88,7 +88,7 @@ namespace Bogosoft.Mvc.Xsl
 
                     try
                     {
-                        cache[filepath] = source.Provision(filepath);
+                        cache[filepath] = source.GetTransform(filepath);
 
                         if(watchForChanges && File.Exists(filepath))
                         {

@@ -3,9 +3,9 @@
 namespace Bogosoft.Mvc.Xsl
 {
     /// <summary>
-    /// A filesystem-based implementation of the <see cref="IXslTransformProvider"/> contract.
+    /// A filesystem-based implementation of the <see cref="ITransformProvider"/> contract.
     /// </summary>
-    public class FileXslTransformProvider : IXslTransformProvider
+    public class FileXslTransformProvider : ITransformProvider
     {
         /// <summary>
         /// Provision an XSL transform against a given filepath.
@@ -16,7 +16,7 @@ namespace Bogosoft.Mvc.Xsl
         /// <returns>
         /// An <see cref="XslCompiledTransform"/> object.
         /// </returns>
-        public XslCompiledTransform Provision(string filepath)
+        public XslCompiledTransform GetTransform(string filepath)
         {
             var processor = new XslCompiledTransform();
 

@@ -19,7 +19,7 @@ namespace Bogosoft.Mvc.Xsl
         /// <returns>A new XSLT view engine.</returns>
         public static XsltViewEngine Create(
             IEnumerable<PathFormatter> locations,
-            XslTransformProvider transformProvider
+            TransformProvider transformProvider
             )
         {
             return new XsltViewEngine
@@ -37,13 +37,13 @@ namespace Bogosoft.Mvc.Xsl
         /// <returns>A new XSLT view engine.</returns>
         public static XsltViewEngine Create(
             IEnumerable<PathFormatter> locations,
-            IXslTransformProvider transformProvider
+            ITransformProvider transformProvider
             )
         {
             return new XsltViewEngine
             {
                 Locations = locations.ToArray(),
-                TransformProvider = transformProvider.Provision
+                TransformProvider = transformProvider.GetTransform
             };
         }
 
@@ -70,7 +70,7 @@ namespace Bogosoft.Mvc.Xsl
         /// <summary>
         /// Get or set the XSL transform provider for the current view engine.
         /// </summary>
-        protected XslTransformProvider TransformProvider;
+        protected TransformProvider TransformProvider;
 
         /// <summary>
         /// Create a new instance of the <see cref="XsltViewEngine"/> class.

@@ -5,7 +5,7 @@ namespace Bogosoft.Mvc.Xsl
     /// <summary>
     /// Indicates that an implementation is capable of providing <see cref="XslCompiledTransform"/> objects.
     /// </summary>
-    public interface IXslTransformProvider
+    public interface ITransformProvider
     {
         /// <summary>
         /// Provision an XSL transform against a given filepath.
@@ -16,6 +16,6 @@ namespace Bogosoft.Mvc.Xsl
         /// <returns>
         /// An <see cref="XslCompiledTransform"/> object.
         /// </returns>
-        XslCompiledTransform Provision(string filepath);
+        XslCompiledTransform GetTransform(string filepath);
     }
 }

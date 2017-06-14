@@ -78,12 +78,12 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="FileXslTransformProvider.cs" />
     <Compile Include="IXmlFilter.cs" />
-    <Compile Include="IXslTransformProvider.cs" />
-    <Compile Include="MemoryCachedXslTransformProvider.cs" />
+    <Compile Include="ITransformProvider.cs" />
+    <Compile Include="MemoryCachedTransformProvider.cs" />
     <Compile Include="PathFormatter.cs" />
     <Compile Include="UnserializableModelException.cs" />
     <Compile Include="XmlFilterAsync.cs" />
-    <Compile Include="XslTransformProvider.cs" />
+    <Compile Include="TransformProvider.cs" />
     <Compile Include="XsltView.cs" />
     <Compile Include="XsltViewEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
