@@ -10,13 +10,13 @@ namespace Bogosoft.Mvc.Xsl
     public interface IXmlFilter
     {
         /// <summary>
-        /// Filter a given node and its descendants if any.
+        /// Filter a given XML document.
         /// </summary>
-        /// <param name="node">A node to begin filtering on.</param>
+        /// <param name="document">A document to filter.</param>
         /// <param name="token">A <see cref="CancellationToken"/> object.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation.
         /// </returns>
-        Task FilterAsync(XmlNode node, CancellationToken token);
+        Task FilterAsync(XmlDocument document, CancellationToken token);
     }
 }

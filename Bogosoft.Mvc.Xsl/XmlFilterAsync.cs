@@ -7,10 +7,10 @@ namespace Bogosoft.Mvc.Xsl
     /// <summary>
     /// Filter a given node and its descendants if any.
     /// </summary>
-    /// <param name="node">A node to begin filtering on.</param>
+    /// <param name="document">An XML document to filter.</param>
     /// <param name="token">A <see cref="CancellationToken"/> object.</param>
     /// <returns>
     /// A <see cref="Task"/> representing the asynchronous operation.
     /// </returns>
-    public delegate Task XmlFilterAsync(XmlNode node, CancellationToken token);
+    public delegate Task XmlFilterAsync(XmlDocument document, CancellationToken token);
 }
