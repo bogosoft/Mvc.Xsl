@@ -91,6 +91,7 @@
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="FileXslTransformProvider.cs" />
+    <Compile Include="ICachedTransformProvider.cs" />
     <Compile Include="IXmlFilter.cs" />
     <Compile Include="ITransformProvider.cs" />
     <Compile Include="MemoryCachedTransformProvider.cs" />

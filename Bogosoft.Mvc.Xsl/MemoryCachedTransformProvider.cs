@@ -10,7 +10,7 @@ namespace Bogosoft.Mvc.Xsl
     /// <summary>
     /// An in-memory caching implementation of the <see cref="ITransformProvider"/> contract.
     /// </summary>
-    public sealed class MemoryCachedTransformProvider : IDisposable, ITransformProvider
+    public sealed class MemoryCachedTransformProvider : ICachedTransformProvider, IDisposable
     {
         readonly Dictionary<string, XslCompiledTransform> cache;
         ReaderWriterLockSlim @lock = new ReaderWriterLockSlim();
@@ -40,6 +40,30 @@ namespace Bogosoft.Mvc.Xsl
         }
 
         /// <summary>
+        /// Clear the current cache of all cached items.
+        /// </summary>
+        public void Clear()
+        {
+            @lock.EnterWriteLock();
+
+            try
+            {
+                cache.Clear();
+
+                foreach (var x in watchers.Select(y => y.Value))
+                {
+                    x.Dispose();
+                }
+
+                watchers.Clear();
+            }
+            finally
+            {
+                @lock.ExitWriteLock();
+            }
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing,
         /// or resetting unmanaged resources.
         /// </summary>
@@ -49,6 +73,8 @@ namespace Bogosoft.Mvc.Xsl
             {
                 x.Dispose();
             }
+
+            @lock.Dispose();
         }
 
         void FileSystemWatcher_OnChanged(object sender, FileSystemEventArgs args)
