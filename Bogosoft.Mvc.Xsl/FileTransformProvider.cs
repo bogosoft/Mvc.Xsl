@@ -5,7 +5,7 @@ namespace Bogosoft.Mvc.Xsl
     /// <summary>
     /// A filesystem-based implementation of the <see cref="ITransformProvider"/> contract.
     /// </summary>
-    public class FileXslTransformProvider : ITransformProvider
+    public class FileTransformProvider : ITransformProvider
     {
         /// <summary>
         /// Provision an XSL transform against a given filepath.

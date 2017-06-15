@@ -67,7 +67,7 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
         static Services()
         {
-            ITransformProvider provider = new FileXslTransformProvider();
+            ITransformProvider provider = new FileTransformProvider();
 
             if (ConfigurationManager.AppSettings["CacheXslTransforms"] == "true")
             {
