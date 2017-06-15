@@ -2,6 +2,7 @@
 using Autofac.Integration.Mvc;
 using Bogosoft.Mvc.Xsl.WebTest.Infrastructure;
 using System;
+using System.Configuration;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -30,13 +31,29 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(builder.Build()));
-
             ViewEngines.Engines.Clear();
 
-            ViewEngines.Engines.Add(Services.ViewEngines);
+            ITransformProvider provider = new FileTransformProvider();
+
+            if(ConfigurationManager.AppSettings["CacheXslTransforms"]?.ToLower() == "true")
+            {
+                var watch = ConfigurationManager.AppSettings["WatchForChangesInXslts"]?.ToLower() == "true";
+
+                provider = new MemoryCachedTransformProvider(provider, watch);
+
+                builder.RegisterInstance(provider).As<ICachedTransformProvider>();
+            }
+
+            var engine = XsltViewEngine.Create(Services.ViewLocations, provider.GetTransform)
+                                       .Using(Services.XmlFormatter)
+                                       .Using(Services.Filters)
+                                       .With(Services.DefaultViewParameters);
+
+            ViewEngines.Engines.Add(engine);
 
             Disposed += Application_Disposed;
+
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(builder.Build()));
         }
     }
 }

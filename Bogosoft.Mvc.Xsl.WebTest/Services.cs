@@ -19,7 +19,7 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
         static string BundledFilesCachePath => Path.Combine(PhysicalApplicationPath, "Content", "cached");
 
-        static IDictionary<string, object> DefaultViewParameters = new Dictionary<string, object>()
+        internal static IDictionary<string, object> DefaultViewParameters = new Dictionary<string, object>()
         {
             { "page-title", "XSL Views Demo" }
         };
@@ -40,7 +40,7 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             }
         }
 
-        static IEnumerable<XmlFilterAsync> Filters
+        internal static IEnumerable<XmlFilterAsync> Filters
         {
             get
             {
@@ -53,39 +53,20 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             }
         }
 
-        internal static IEnumerable<IViewEngine> ViewEngines;
-
-        static IEnumerable<PathFormatter> ViewLocations = new PathFormatter[]
+        internal static IEnumerable<PathFormatter> ViewLocations
         {
-            StandardViewPathFormatter,
-            SharedViewPathFormatter
-        };
-
-        static XmlFormatterAsync XmlFormatter = new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" }.FormatAsync;
-
-        static TransformProvider XslTransformProvider;
-
-        static Services()
-        {
-            ITransformProvider provider = new FileTransformProvider();
-
-            if (ConfigurationManager.AppSettings["CacheXslTransforms"] == "true")
+            get
             {
-                provider = new MemoryCachedTransformProvider(
-                    provider,
-                    ConfigurationManager.AppSettings["WatchForChangesInXslts"] == "true"
-                    );
+                yield return StandardViewPathFormatter;
+                yield return SharedViewPathFormatter;
             }
-
-            XslTransformProvider = provider.GetTransform;
-
-            var engine = XsltViewEngine.Create(ViewLocations, XslTransformProvider)
-                                       .Using(XmlFormatter)
-                                       .Using(Filters)
-                                       .With(DefaultViewParameters);
-
-            ViewEngines = new IViewEngine[] { engine };
         }
+
+        internal static IFormatXml XmlFormatter => new Xhtml5Formatter
+        {
+            Indent = "\t",
+            LBreak = "\r\n"
+        };
 
         static string SharedViewPathFormatter(ControllerContext context)
         {
