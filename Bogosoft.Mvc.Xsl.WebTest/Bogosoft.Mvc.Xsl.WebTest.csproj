@@ -51,8 +51,8 @@
     <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="Bogosoft.Caching, Version=2.1.0.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bogosoft.Caching.2.1.0.8\lib\net452\Bogosoft.Caching.dll</HintPath>
+    <Reference Include="Bogosoft.Caching, Version=3.0.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogosoft.Caching.3.0.0.9\lib\net452\Bogosoft.Caching.dll</HintPath>
     </Reference>
     <Reference Include="Bogosoft.Hashing, Version=1.2.0.7, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bogosoft.Hashing.1.2.0.7\lib\net452\Bogosoft.Hashing.dll</HintPath>
