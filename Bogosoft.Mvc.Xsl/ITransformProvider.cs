@@ -1,4 +1,5 @@
-﻿using System.Xml.Xsl;
+﻿using System.Web.Mvc;
+using System.Xml.Xsl;
 
 namespace Bogosoft.Mvc.Xsl
 {
@@ -8,14 +9,12 @@ namespace Bogosoft.Mvc.Xsl
     public interface ITransformProvider
     {
         /// <summary>
-        /// Provision an XSL transform against a given filepath.
+        /// Search for an <see cref="XslCompiledTransform"/> against a given controller context.
         /// </summary>
-        /// <param name="filepath">
-        /// A filepath corresponding to an XSLT.
-        /// </param>
+        /// <param name="context">A controller context.</param>
         /// <returns>
-        /// An <see cref="XslCompiledTransform"/> object.
+        /// The result of searching for an XSL transform.
         /// </returns>
-        XslCompiledTransform GetTransform(string filepath);
+        TransformSearchResult GetTransform(ControllerContext context);
     }
 }

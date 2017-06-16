@@ -32,6 +32,15 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
         static string PhysicalApplicationPath = HttpRuntime.AppDomainAppPath.TrimEnd('/', '\\');
 
+        static IEnumerable<ITransformProvider> TransformProviders
+        {
+            get
+            {
+                yield return new LocalFileTransformProvider(LocalViewPathFormatter);
+                yield return new LocalFileTransformProvider(LocalSharedViewPathFormatter);
+            }
+        }
+
         static IEnumerable<PathFormatter> ViewLocations
         {
             get
@@ -43,22 +52,17 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
         internal static IEnumerable<object> Configure()
         {
-            ITransformProvider provider = new FileTransformProvider();
-
-            if (Settings.CacheLocalTransforms)
-            {
-                yield return provider = new MemoryCachedTransformProvider(provider, Settings.WatchForLocalChanges);
-            }
-
             var formatter = new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" }.With(Filters);
 
-            var engine = XsltViewEngine.Create(ViewLocations, provider)
+            var engine = XsltViewEngine.Create(TransformProviders)
                                        .Using(formatter)
                                        .With(DefaultViewParameters);
 
             ViewEngines.Engines.Clear();
 
             ViewEngines.Engines.Add(engine);
+
+            yield break;
         }
 
         static string LocalSharedViewPathFormatter(ControllerContext context)

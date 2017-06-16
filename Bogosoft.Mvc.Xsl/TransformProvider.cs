@@ -1,15 +1,14 @@
-﻿using System.Xml.Xsl;
+﻿using System.Web.Mvc;
+using System.Xml.Xsl;
 
 namespace Bogosoft.Mvc.Xsl
 {
     /// <summary>
-    /// Gets an <see cref="XslCompiledTransform"/> based on a given filepath.
+    /// Search for an <see cref="XslCompiledTransform"/> against a given controller context.
     /// </summary>
-    /// <param name="filepath">
-    /// A filepath corresponding to an XSLT.
-    /// </param>
+    /// <param name="context">A controller context.</param>
     /// <returns>
-    /// An <see cref="XslCompiledTransform"/> object.
+    /// The result of searching for an XSL transform.
     /// </returns>
-    public delegate XslCompiledTransform TransformProvider(string filepath);
+    public delegate TransformSearchResult TransformProvider(ControllerContext context);
 }

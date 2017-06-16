@@ -1,6 +1,5 @@
 ﻿using Bogosoft.Xml;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -14,36 +13,27 @@ namespace Bogosoft.Mvc.Xsl
         /// <summary>
         /// Create a new instance of an <see cref="XsltViewEngine"/>.
         /// </summary>
-        /// <param name="locations">A collection of filepath formatters.</param>
-        /// <param name="transformProvider">An XSL transform provider.</param>
+        /// <param name="providers">A collection of XSL transform providers.</param>
         /// <returns>A new XSLT view engine.</returns>
-        public static XsltViewEngine Create(
-            IEnumerable<PathFormatter> locations,
-            TransformProvider transformProvider
-            )
+        public static XsltViewEngine Create(IEnumerable<TransformProvider> providers)
         {
             return new XsltViewEngine
             {
-                Locations = locations.ToArray(),
-                TransformProvider = transformProvider
+                TransformProviders = providers.ToArray()
             };
         }
 
         /// <summary>
         /// Create a new instance of an <see cref="XsltViewEngine"/>.
         /// </summary>
-        /// <param name="locations">A collection of filepath formatters.</param>
-        /// <param name="transformProvider">An XSL transform provider.</param>
+        /// <param name="providers">A collection of XSL transform providers.</param>
         /// <returns>A new XSLT view engine.</returns>
-        public static XsltViewEngine Create(
-            IEnumerable<PathFormatter> locations,
-            ITransformProvider transformProvider
-            )
+        public static XsltViewEngine Create(IEnumerable<ITransformProvider> providers)
         {
             return new XsltViewEngine
             {
-                Locations = locations.ToArray(),
-                TransformProvider = transformProvider.GetTransform
+                TransformProviders = providers.Select<ITransformProvider, TransformProvider>(x => x.GetTransform)
+                                              .ToArray()
             };
         }
 
@@ -58,14 +48,9 @@ namespace Bogosoft.Mvc.Xsl
         protected XmlFormatterAsync Formatter;
 
         /// <summary>
-        /// Get or set a collection of locations as filepath formatters.
+        /// Get or set an array of XSL transform providers.
         /// </summary>
-        protected PathFormatter[] Locations;
-
-        /// <summary>
-        /// Get or set the XSL transform provider for the current view engine.
-        /// </summary>
-        protected TransformProvider TransformProvider;
+        protected TransformProvider[] TransformProviders;
 
         /// <summary>
         /// Create a new instance of the <see cref="XsltViewEngine"/> class.
@@ -107,23 +92,17 @@ namespace Bogosoft.Mvc.Xsl
             bool useCache
             )
         {
-            string path;
-
             List<string> searched = new List<string>();
 
-            foreach (var x in Locations)
+            foreach (var x in TransformProviders)
             {
-                path = x.Invoke(context);
+                var result = x.Invoke(context);
 
-                searched.Add(path);
+                searched.Add(result.SearchedPath);
 
-                if (File.Exists(path))
+                if (result.HasTransform)
                 {
-                    var view = new XsltView(
-                        TransformProvider.Invoke(path),
-                        Formatter,
-                        DefaultParameters.Copy()
-                        );
+                    var view = new XsltView(result.Transform, Formatter, DefaultParameters.Copy());
 
                     return new ViewEngineResult(view, this);
                 }

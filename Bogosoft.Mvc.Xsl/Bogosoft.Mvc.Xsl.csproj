@@ -89,11 +89,12 @@
   <ItemGroup>
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="FileTransformProvider.cs" />
+    <Compile Include="HttpFileTransformProvider.cs" />
+    <Compile Include="LocalFileTransformProvider.cs" />
     <Compile Include="ICachedTransformProvider.cs" />
     <Compile Include="ITransformProvider.cs" />
-    <Compile Include="MemoryCachedTransformProvider.cs" />
     <Compile Include="PathFormatter.cs" />
+    <Compile Include="TransformSearchResult.cs" />
     <Compile Include="UnserializableModelException.cs" />
     <Compile Include="TransformProvider.cs" />
     <Compile Include="XsltView.cs" />
