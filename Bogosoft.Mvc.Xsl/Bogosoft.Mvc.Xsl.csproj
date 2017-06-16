@@ -38,8 +38,8 @@
     <Reference Include="Bogosoft.Maybe, Version=1.0.5.20, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bogosoft.Maybe.1.0.5.20\lib\net452\Bogosoft.Maybe.dll</HintPath>
     </Reference>
-    <Reference Include="Bogosoft.Xml, Version=1.2.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bogosoft.Xml.1.2.1.6\lib\net452\Bogosoft.Xml.dll</HintPath>
+    <Reference Include="Bogosoft.Xml, Version=1.2.3.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogosoft.Xml.1.2.3.8\lib\net452\Bogosoft.Xml.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>

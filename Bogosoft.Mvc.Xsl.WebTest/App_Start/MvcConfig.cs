@@ -17,7 +17,7 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             { "page-title", "XSL Views Demo" }
         };
 
-        static IEnumerable<AsyncFilter> Filters
+        static IEnumerable<AsyncXmlFilter> Filters
         {
             get
             {
@@ -50,9 +50,7 @@ namespace Bogosoft.Mvc.Xsl.WebTest
                 yield return provider = new MemoryCachedTransformProvider(provider, Settings.WatchForLocalChanges);
             }
 
-            var formatter = new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" };
-
-            formatter.With(Filters);
+            var formatter = new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" }.With(Filters);
 
             var engine = XsltViewEngine.Create(ViewLocations, provider)
                                        .Using(formatter)
