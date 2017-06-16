@@ -46,7 +46,6 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
             var engine = XsltViewEngine.Create(Services.ViewLocations, provider.GetTransform)
                                        .Using(Services.XmlFormatter)
-                                       .Using(Services.Filters)
                                        .With(Services.DefaultViewParameters);
 
             ViewEngines.Engines.Add(engine);

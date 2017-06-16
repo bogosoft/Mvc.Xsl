@@ -40,7 +40,7 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             }
         }
 
-        internal static IEnumerable<XmlFilterAsync> Filters
+        internal static IEnumerable<AsyncFilter> Filters
         {
             get
             {

@@ -63,11 +63,11 @@
     <Reference Include="Bogosoft.Maybe, Version=1.0.5.20, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bogosoft.Maybe.1.0.5.20\lib\net452\Bogosoft.Maybe.dll</HintPath>
     </Reference>
-    <Reference Include="Bogosoft.Xml, Version=1.1.3.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bogosoft.Xml.1.1.3.4\lib\net452\Bogosoft.Xml.dll</HintPath>
+    <Reference Include="Bogosoft.Xml, Version=1.2.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogosoft.Xml.1.2.1.6\lib\net452\Bogosoft.Xml.dll</HintPath>
     </Reference>
-    <Reference Include="Bogosoft.Xml.Xhtml5, Version=1.1.4.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bogosoft.Xml.Xhtml5.1.1.4.9\lib\net452\Bogosoft.Xml.Xhtml5.dll</HintPath>
+    <Reference Include="Bogosoft.Xml.Xhtml5, Version=1.2.1.11, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogosoft.Xml.Xhtml5.1.2.1.11\lib\net452\Bogosoft.Xml.Xhtml5.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
