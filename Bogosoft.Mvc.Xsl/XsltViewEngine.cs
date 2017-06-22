@@ -11,33 +11,6 @@ namespace Bogosoft.Mvc.Xsl
     public class XsltViewEngine : IViewEngine
     {
         /// <summary>
-        /// Create a new instance of an <see cref="XsltViewEngine"/>.
-        /// </summary>
-        /// <param name="providers">A collection of XSL transform providers.</param>
-        /// <returns>A new XSLT view engine.</returns>
-        public static XsltViewEngine Create(IEnumerable<TransformProvider> providers)
-        {
-            return new XsltViewEngine
-            {
-                TransformProviders = providers.ToArray()
-            };
-        }
-
-        /// <summary>
-        /// Create a new instance of an <see cref="XsltViewEngine"/>.
-        /// </summary>
-        /// <param name="providers">A collection of XSL transform providers.</param>
-        /// <returns>A new XSLT view engine.</returns>
-        public static XsltViewEngine Create(IEnumerable<ITransformProvider> providers)
-        {
-            return new XsltViewEngine
-            {
-                TransformProviders = providers.Select<ITransformProvider, TransformProvider>(x => x.GetTransform)
-                                              .ToArray()
-            };
-        }
-
-        /// <summary>
         /// Get the default argument dictionary of the current view engine.
         /// These are populated on application start and can be overridden with the contents
         /// of a <see cref="ViewDataDictionary"/> object on view creation.
@@ -55,8 +28,20 @@ namespace Bogosoft.Mvc.Xsl
         /// <summary>
         /// Create a new instance of the <see cref="XsltViewEngine"/> class.
         /// </summary>
-        protected XsltViewEngine()
+        /// <param name="providers">A collection of transform providers.</param>
+        public XsltViewEngine(IEnumerable<TransformProvider> providers)
         {
+            TransformProviders = providers.ToArray();
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="providers">A collection of transform providers.</param>
+        public XsltViewEngine(IEnumerable<ITransformProvider> providers)
+        {
+            TransformProviders = providers.Select<ITransformProvider, TransformProvider>(x => x.GetTransform)
+                                          .ToArray();
         }
 
         /// <summary>
