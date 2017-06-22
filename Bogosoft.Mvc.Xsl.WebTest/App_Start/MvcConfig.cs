@@ -56,6 +56,8 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
             var engine = new XsltViewEngine(TransformProviders).Using(formatter).With(DefaultViewParameters);
 
+            engine.ParameterizingView += ViewEngine_ParameterizingView;
+
             ViewEngines.Engines.Clear();
 
             ViewEngines.Engines.Add(engine);
@@ -75,6 +77,12 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             var data = context.RouteData;
 
             return context.MapPath($"~/Views/{data.GetController()}/{data.GetAction()}.xslt");
+        }
+
+        static void ViewEngine_ParameterizingView(ParameterizingViewEventArgs args)
+        {
+            args.Parameters["action"] = args.Context.RouteData.GetAction();
+            args.Parameters["controller"] = args.Context.RouteData.GetController();
         }
     }
 }

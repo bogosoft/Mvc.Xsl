@@ -90,6 +90,8 @@
     <Compile Include="LocalFileTransformProvider.cs" />
     <Compile Include="ICachedTransformProvider.cs" />
     <Compile Include="ITransformProvider.cs" />
+    <Compile Include="ParameterizingViewEventArgs.cs" />
+    <Compile Include="ParameterizingViewEventHandler.cs" />
     <Compile Include="PathFormatter.cs" />
     <Compile Include="TransformSearchResult.cs" />
     <Compile Include="UnserializableModelException.cs" />

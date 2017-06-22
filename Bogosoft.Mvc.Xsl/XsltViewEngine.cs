@@ -26,6 +26,12 @@ namespace Bogosoft.Mvc.Xsl
         protected TransformProvider[] TransformProviders;
 
         /// <summary>
+        /// Occurs just before a copy of the current engine's default parameters
+        /// are handed off to a newly created <see cref="IView"/> object.
+        /// </summary>
+        public event ParameterizingViewEventHandler ParameterizingView;
+
+        /// <summary>
         /// Create a new instance of the <see cref="XsltViewEngine"/> class.
         /// </summary>
         /// <param name="providers">A collection of transform providers.</param>
@@ -87,7 +93,18 @@ namespace Bogosoft.Mvc.Xsl
 
                 if (result.HasTransform)
                 {
-                    var view = new XsltView(result.Transform, Formatter, DefaultParameters.Copy());
+                    var parameters = DefaultParameters.Copy();
+
+                    if (ParameterizingView != null)
+                    {
+                        ParameterizingView.Invoke(new ParameterizingViewEventArgs
+                        {
+                            Context = context,
+                            Parameters = parameters
+                        });
+                    }
+
+                    var view = new XsltView(result.Transform, Formatter, parameters);
 
                     return new ViewEngineResult(view, this);
                 }
