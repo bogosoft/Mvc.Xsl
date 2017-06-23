@@ -1,4 +1,5 @@
-﻿using Bogosoft.Hashing.Cryptography;
+﻿using Bogosoft.Hashing;
+using Bogosoft.Hashing.Cryptography;
 using Bogosoft.Xml;
 using Bogosoft.Xml.Xhtml5;
 using System.Collections.Generic;
@@ -10,27 +11,22 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 {
     static class MvcConfig
     {
-        static string BundledFilesCachePath => Path.Combine(PhysicalApplicationPath, "Content", "cached");
+        static string BundledFilesCachePath => Path.Combine(ApplicationPath, "Content", "cached");
 
         static IDictionary<string, object> DefaultViewParameters = new Dictionary<string, object>()
         {
             { "page-title", "XSL Views Demo" }
         };
 
-        static IEnumerable<AsyncXmlFilter> Filters
+        static IEnumerable<IFilterXml> Filters
         {
             get
             {
-                yield return new CssBundlingFilter(
-                    PhysicalApplicationPath,
-                    "content/cached",
-                    BundledFilesCachePath,
-                    CryptoHashStrategy.MD5
-                    ).FilterAsync;
+                yield return new CssBundlingFilter(ToRelativeUri, ToPhysicalPath, ToBundledCssFilepath);
             }
         }
 
-        static string PhysicalApplicationPath = HttpRuntime.AppDomainAppPath.TrimEnd('/', '\\');
+        static string ApplicationPath = HttpRuntime.AppDomainAppPath.TrimEnd('/', '\\');
 
         static IEnumerable<ITransformProvider> TransformProviders
         {
@@ -77,6 +73,28 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             var data = context.RouteData;
 
             return context.MapPath($"~/Views/{data.GetController()}/{data.GetAction()}.xslt");
+        }
+
+        static string ToBundledCssFilepath(IEnumerable<string> uris)
+        {
+            return ToBundledFilepath(uris, "css");
+        }
+
+        static string ToBundledFilepath(IEnumerable<string> uris, string extension)
+        {
+            var hash = CryptoHashStrategy.MD5.Compute(uris).ToHexString();
+
+            return Path.Combine(HttpRuntime.AppDomainAppPath, "content", "cached", $"{hash}.{extension}");
+        }
+
+        static string ToPhysicalPath(string uri)
+        {
+            return Path.Combine(HttpRuntime.AppDomainAppPath, uri);
+        }
+
+        static string ToRelativeUri(string filepath)
+        {
+            return $"content/cached/{Path.GetFileName(filepath)}";
         }
 
         static void ViewEngine_ParameterizingView(ParameterizingViewEventArgs args)
