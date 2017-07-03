@@ -84,9 +84,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompositeTransformProvider.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="HttpFileTransformProvider.cs" />
+    <Compile Include="ListExtensions.cs" />
     <Compile Include="LocalFileTransformProvider.cs" />
     <Compile Include="ICachedTransformProvider.cs" />
     <Compile Include="ITransformProvider.cs" />

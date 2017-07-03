@@ -89,7 +89,7 @@ namespace Bogosoft.Mvc.Xsl
             {
                 var result = x.Invoke(context);
 
-                searched.Add(result.SearchedPath);
+                searched.Add(result.SearchedPaths);
 
                 if (result.HasTransform)
                 {
