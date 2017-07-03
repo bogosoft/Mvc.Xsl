@@ -155,18 +155,23 @@ namespace Bogosoft.Mvc.Xsl.WebTest
 
         static string LocalSharedViewPathFormatter(ControllerContext context)
         {
-            return context.MapPath($"~/Views/Shared/{Action(context)}.xslt");
+            return Resolve(context, $"~/Views/Shared/{Action(context)}.xslt");
         }
 
         static string LocalViewPathFormatter(ControllerContext context)
         {
-            return context.MapPath($"~/Views/{Controller(context)}/{Action(context)}.xslt");
+            return Resolve(context, $"~/Views/{Controller(context)}/{Action(context)}.xslt");
         }
 
         static IEnumerable<ITransformProvider> GetSourceTransformProviders()
         {
             yield return new LocalFileTransformProvider(LocalViewPathFormatter);
             yield return new LocalFileTransformProvider(LocalSharedViewPathFormatter);
+        }
+
+        static string Resolve(ControllerContext context, string path)
+        {
+            return context.HttpContext.Server.MapPath(path);
         }
 
         static string ToBundledCssFilepath(IEnumerable<string> uris)

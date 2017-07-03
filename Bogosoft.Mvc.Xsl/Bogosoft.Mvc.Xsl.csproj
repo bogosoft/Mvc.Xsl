@@ -97,7 +97,6 @@
   <ItemGroup>
     <Compile Include="CompositeTransformProvider.cs" />
     <Compile Include="ControllerContextExtensions.cs" />
-    <Compile Include="DefaultViewEngineFactory.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="HttpFileTransformProvider.cs" />
@@ -112,7 +111,6 @@
     <Compile Include="TransformSearchResult.cs" />
     <Compile Include="UnserializableModelException.cs" />
     <Compile Include="TransformProvider.cs" />
-    <Compile Include="ViewEngineFactoryBase.cs" />
     <Compile Include="XsltView.cs" />
     <Compile Include="XsltViewEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
