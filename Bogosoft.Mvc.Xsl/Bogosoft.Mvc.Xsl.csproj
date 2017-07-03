@@ -95,6 +95,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Start\ViewEnginesConfig.cs.pp" />
     <Compile Include="CompositeTransformProvider.cs" />
     <Compile Include="ControllerContextExtensions.cs" />
     <Compile Include="DictionaryExtensions.cs" />
