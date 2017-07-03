@@ -3,12 +3,18 @@
 	<!-- Imports -->
 	<xsl:import href="JQuery.xslt" />
 	<!-- Parameters -->
+	<xsl:param name="bootstrap-container-class" select="'container'" />
 	<xsl:param name="bootstrap-css-path" select="'Content/bootstrap.min.css'" />
 	<xsl:param name="bootstrap-js-path" select="'Scripts/bootstrap.min.js'" />
 	<!-- Structural Templates -->
 	<xsl:template match="/" mode="html.head.links">
 		<xsl:apply-imports />
 		<link href="{$bootstrap-css-path}" rel="stylesheet" />
+	</xsl:template>
+	<xsl:template match="/" mode="html.body.container">
+		<div class="{$bootstrap-container-class}">
+			<xsl:apply-imports />
+		</div>
 	</xsl:template>
 	<xsl:template match="/" mode="html.body.scripts">
 		<xsl:apply-imports />
