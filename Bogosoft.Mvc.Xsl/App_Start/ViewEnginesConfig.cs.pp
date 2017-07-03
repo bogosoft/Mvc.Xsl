@@ -229,8 +229,6 @@ namespace $rootnamespace$
             var engine = new XsltViewEngine(provider, Formatter.With(Filters), DefaultViewParameters);
 
             ViewEngines.Engines.Add(engine);
-
-            engine.ParameterizingView += ViewEngine_ParameterizingView;
         }
     }
 }
