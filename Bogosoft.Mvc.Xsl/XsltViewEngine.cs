@@ -1,6 +1,5 @@
 ﻿using Bogosoft.Xml;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace Bogosoft.Mvc.Xsl
@@ -23,7 +22,7 @@ namespace Bogosoft.Mvc.Xsl
         /// <summary>
         /// Get or set an array of XSL transform providers.
         /// </summary>
-        protected TransformProvider[] TransformProviders;
+        public readonly TransformProvider TransformProvider;
 
         /// <summary>
         /// Occurs just before a copy of the current engine's default parameters
@@ -34,20 +33,159 @@ namespace Bogosoft.Mvc.Xsl
         /// <summary>
         /// Create a new instance of the <see cref="XsltViewEngine"/> class.
         /// </summary>
-        /// <param name="providers">A collection of transform providers.</param>
-        public XsltViewEngine(IEnumerable<TransformProvider> providers)
+        /// <param name="transformProvider">A transform provider.</param>
+        public XsltViewEngine(TransformProvider transformProvider)
+            : this(transformProvider, (XmlFormatterAsync)null, null)
         {
-            TransformProviders = providers.ToArray();
         }
 
         /// <summary>
         /// Create a new instance of the <see cref="XsltViewEngine"/> class.
         /// </summary>
-        /// <param name="providers">A collection of transform providers.</param>
-        public XsltViewEngine(IEnumerable<ITransformProvider> providers)
+        /// <param name="transformProvider">A transform provider.</param>
+        public XsltViewEngine(ITransformProvider transformProvider)
+            : this(transformProvider.GetTransform, (XmlFormatterAsync)null, null)
         {
-            TransformProviders = providers.Select<ITransformProvider, TransformProvider>(x => x.GetTransform)
-                                          .ToArray();
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="formatter">An XML formatter to use when rendering to output.</param>
+        public XsltViewEngine(TransformProvider transformProvider, XmlFormatterAsync formatter)
+            : this(transformProvider, formatter, null)
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="formatter">An XML formatter to use when rendering to output.</param>
+        public XsltViewEngine(ITransformProvider transformProvider, XmlFormatterAsync formatter)
+            : this(transformProvider.GetTransform, formatter, null)
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="formatter">An XML formatter to use when rendering to output.</param>
+        public XsltViewEngine(TransformProvider transformProvider, IFormatXml formatter)
+            : this(transformProvider, formatter.FormatAsync, null)
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="formatter">An XML formatter to use when rendering to output.</param>
+        public XsltViewEngine(ITransformProvider transformProvider, IFormatXml formatter)
+            : this(transformProvider.GetTransform, formatter.FormatAsync, null)
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="defaultParameters">
+        /// A collection of overridable parameters used in view rendering.
+        /// </param>
+        public XsltViewEngine(
+            TransformProvider transformProvider,
+            IDictionary<string, object> defaultParameters
+            )
+            : this(transformProvider, (XmlFormatterAsync)null, defaultParameters)
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="defaultParameters">
+        /// A collection of overridable parameters used in view rendering.
+        /// </param>
+        public XsltViewEngine(
+            ITransformProvider transformProvider,
+            IDictionary<string, object> defaultParameters
+            )
+            : this(transformProvider.GetTransform, (XmlFormatterAsync)null, defaultParameters)
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="formatter">An XML formatter to use when rendering to output.</param>
+        /// <param name="defaultParameters">
+        /// A collection of overridable parameters used in view rendering.
+        /// </param>
+        public XsltViewEngine(
+            TransformProvider transformProvider,
+            XmlFormatterAsync formatter,
+            IDictionary<string, object> defaultParameters
+            )
+        {
+            DefaultParameters = defaultParameters ?? new Dictionary<string, object>();
+            Formatter = formatter;
+            TransformProvider = transformProvider;
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="formatter">An XML formatter to use when rendering to output.</param>
+        /// <param name="defaultParameters">
+        /// A collection of overridable parameters used in view rendering.
+        /// </param>
+        public XsltViewEngine(
+            ITransformProvider transformProvider,
+            XmlFormatterAsync formatter,
+            IDictionary<string, object> defaultParameters
+            )
+            : this(transformProvider.GetTransform, formatter, defaultParameters)
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="formatter">An XML formatter to use when rendering to output.</param>
+        /// <param name="defaultParameters">
+        /// A collection of overridable parameters used in view rendering.
+        /// </param>
+        public XsltViewEngine(
+            TransformProvider transformProvider,
+            IFormatXml formatter,
+            IDictionary<string, object> defaultParameters
+            )
+            : this(transformProvider, formatter.FormatAsync, defaultParameters)
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance of the <see cref="XsltViewEngine"/> class.
+        /// </summary>
+        /// <param name="transformProvider">A transform provider.</param>
+        /// <param name="formatter">An XML formatter to use when rendering to output.</param>
+        /// <param name="defaultParameters">
+        /// A collection of overridable parameters used in view rendering.
+        /// </param>
+        public XsltViewEngine(
+            ITransformProvider transformProvider,
+            IFormatXml formatter,
+            IDictionary<string, object> defaultParameters
+            )
+            : this(transformProvider.GetTransform, formatter.FormatAsync, defaultParameters)
+        {
         }
 
         /// <summary>
@@ -83,34 +221,27 @@ namespace Bogosoft.Mvc.Xsl
             bool useCache
             )
         {
-            List<string> searched = new List<string>();
+            var result = TransformProvider.Invoke(context);
 
-            foreach (var x in TransformProviders)
+            if (result.HasTransform)
             {
-                var result = x.Invoke(context);
+                var parameters = DefaultParameters.Copy();
 
-                searched.Add(result.SearchedPaths);
-
-                if (result.HasTransform)
+                if (ParameterizingView != null)
                 {
-                    var parameters = DefaultParameters.Copy();
-
-                    if (ParameterizingView != null)
+                    ParameterizingView.Invoke(new ParameterizingViewEventArgs
                     {
-                        ParameterizingView.Invoke(new ParameterizingViewEventArgs
-                        {
-                            Context = context,
-                            Parameters = parameters
-                        });
-                    }
-
-                    var view = new XsltView(result.Transform, Formatter, parameters);
-
-                    return new ViewEngineResult(view, this);
+                        Context = context,
+                        Parameters = parameters
+                    });
                 }
+
+                var view = new XsltView(result.Transform, Formatter, parameters);
+
+                return new ViewEngineResult(view, this);
             }
 
-            return new ViewEngineResult(searched);
+            return new ViewEngineResult(result.SearchedPaths);
         }
 
         /// <summary>
@@ -121,43 +252,6 @@ namespace Bogosoft.Mvc.Xsl
         /// <param name="view">A view to release.</param>
         public void ReleaseView(ControllerContext context, IView view)
         {
-        }
-
-        /// <summary>
-        /// Instruct the current view engine to use a given XML formatter.
-        /// </summary>
-        /// <param name="formatter">An XML formatter.</param>
-        /// <returns>The current view engine.</returns>
-        public XsltViewEngine Using(IFormatXml formatter)
-        {
-            Formatter = formatter.FormatAsync;
-
-            return this;
-        }
-
-        /// <summary>
-        /// Instruct the current view engine to use a given XML formatter.
-        /// </summary>
-        /// <param name="formatter">An XML formatter.</param>
-        /// <returns>The current view engine.</returns>
-        public XsltViewEngine Using(XmlFormatterAsync formatter)
-        {
-            Formatter = formatter;
-
-            return this;
-        }
-
-        /// <summary>
-        /// Instruct the current view engine to pass along a collection of overridable
-        /// parameters to any views that it creates.
-        /// </summary>
-        /// <param name="defaultParameters">A collection of overridable parameters.</param>
-        /// <returns>The current view engine.</returns>
-        public XsltViewEngine With(IDictionary<string, object> defaultParameters)
-        {
-            DefaultParameters = defaultParameters;
-
-            return this;
         }
     }
 }

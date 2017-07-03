@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Web.Mvc;
+using System.Xml.Xsl;
 
 namespace Bogosoft.Mvc.Xsl
 {
@@ -12,7 +13,7 @@ namespace Bogosoft.Mvc.Xsl
     /// <typeparam name="T">
     /// The type of the key that search results will be cached against.
     /// </typeparam>
-    public sealed class MemoryCachedTransformProvider<T> : ITransformProvider
+    public sealed class MemoryCachedTransformProvider<T> : ICachedTransformProvider
     {
         Dictionary<T, Result> cachedResults = new Dictionary<T, Result>();
         ReaderWriterLockSlim @lock = new ReaderWriterLockSlim();
@@ -43,6 +44,23 @@ namespace Bogosoft.Mvc.Xsl
         {
             this.selector = selector;
             this.source = source.GetTransform;
+        }
+
+        /// <summary>
+        /// Clear the current cache of all cached items.
+        /// </summary>
+        public void Clear()
+        {
+            @lock.EnterWriteLock();
+
+            try
+            {
+                cachedResults.Clear();
+            }
+            finally
+            {
+                @lock.ExitWriteLock();
+            }
         }
 
         /// <summary>

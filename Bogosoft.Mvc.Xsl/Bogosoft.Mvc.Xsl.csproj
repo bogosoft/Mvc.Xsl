@@ -32,11 +32,20 @@
     <DocumentationFile>bin\Release\Bogosoft.Mvc.Xsl.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bogosoft.Hashing, Version=1.2.1.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bogosoft.Hashing.1.2.1.8\lib\net452\Bogosoft.Hashing.dll</HintPath>
+    <Reference Include="Bogosoft.Hashing, Version=1.3.0.10, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogosoft.Hashing.1.3.0.10\lib\net452\Bogosoft.Hashing.dll</HintPath>
+    </Reference>
+    <Reference Include="Bogosoft.Hashing.Cryptography, Version=1.2.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogosoft.Hashing.Cryptography.1.2.0.6\lib\net452\Bogosoft.Hashing.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="Bogosoft.Mapping, Version=1.1.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogosoft.Mapping.1.1.0.9\lib\net452\Bogosoft.Mapping.dll</HintPath>
     </Reference>
     <Reference Include="Bogosoft.Xml, Version=1.2.3.8, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bogosoft.Xml.1.2.3.8\lib\net452\Bogosoft.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="Bogosoft.Xml.Xhtml5, Version=1.4.0.14, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogosoft.Xml.Xhtml5.1.4.0.14\lib\net452\Bogosoft.Xml.Xhtml5.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -47,10 +56,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -85,6 +96,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositeTransformProvider.cs" />
+    <Compile Include="ControllerContextExtensions.cs" />
+    <Compile Include="DefaultViewEngineFactory.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="HttpFileTransformProvider.cs" />
@@ -99,6 +112,7 @@
     <Compile Include="TransformSearchResult.cs" />
     <Compile Include="UnserializableModelException.cs" />
     <Compile Include="TransformProvider.cs" />
+    <Compile Include="ViewEngineFactoryBase.cs" />
     <Compile Include="XsltView.cs" />
     <Compile Include="XsltViewEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
