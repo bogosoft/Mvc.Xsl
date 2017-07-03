@@ -232,11 +232,5 @@ namespace $rootnamespace$
 
             engine.ParameterizingView += ViewEngine_ParameterizingView;
         }
-
-        static void ViewEngine_ParameterizingView(ParameterizingViewEventArgs args)
-        {
-            args.Parameters["action"] = args.Context.RouteData.Values["action"];
-            args.Parameters["controller"] = args.Context.RouteData.Values["controller"];
-        }
     }
 }
