@@ -10,7 +10,7 @@
 		<link href="content/bootstrap.min.css" rel="stylesheet" />
 		<link href="content/Site.css" rel="stylesheet" />
 	</xsl:template>
-	<xsl:template match="/" mode="html.body.content.no-model">
+	<xsl:template match="/" mode="html.body.content">
 		<p>
 			<xsl:text>Hello, </xsl:text>
 			<xsl:value-of select="$controller" />

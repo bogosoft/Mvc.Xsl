@@ -176,6 +176,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Views\Base.xslt" />
     <Content Include="Views\Home\Index.xslt" />
+    <Content Include="Views\Modeled.xslt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
