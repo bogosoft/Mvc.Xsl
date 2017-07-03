@@ -1,152 +1,92 @@
-﻿using System;
+﻿using Result = Bogosoft.Mvc.Xsl.TransformSearchResult;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading;
-using System.Xml.Xsl;
+using System.Web.Mvc;
 
 namespace Bogosoft.Mvc.Xsl
 {
     /// <summary>
-    /// An in-memory caching implementation of the <see cref="ITransformProvider"/> contract.
+    /// A concurrent, in-memory caching implementation of the <see cref="ITransformProvider"/> contract.
     /// </summary>
-    public sealed class MemoryCachedTransformProvider : ICachedTransformProvider, IDisposable
+    /// <typeparam name="T">
+    /// The type of the key that search results will be cached against.
+    /// </typeparam>
+    public sealed class MemoryCachedTransformProvider<T> : ITransformProvider
     {
-        readonly Dictionary<string, XslCompiledTransform> cache;
+        Dictionary<T, Result> cachedResults = new Dictionary<T, Result>();
         ReaderWriterLockSlim @lock = new ReaderWriterLockSlim();
-        ITransformProvider source;
-        Dictionary<string, FileSystemWatcher> watchers;
-        bool watchForChanges;
+        Func<ControllerContext, T> selector;
+        TransformProvider source;
 
         /// <summary>
-        /// Create a new <see cref="MemoryCachedTransformProvider"/> instance.
+        /// Create a new instance of the <see cref="MemoryCachedTransformProvider{T}"/> class.
         /// </summary>
-        /// <param name="source">
-        /// A source XSL transform provider to cache results from.
+        /// <param name="source">A transform provider to cache.</param>
+        /// <param name="selector">
+        /// A strategy for selecting a key of the specified type against a controller context.
         /// </param>
-        /// <param name="watchForChanges">
-        /// A value indicating whether or not the current provider is to watch
-        /// for changes in files on a watchable filesystem that correspond to cached XSL transforms.
-        /// </param>
-        public MemoryCachedTransformProvider(ITransformProvider source, bool watchForChanges = false)
+        public MemoryCachedTransformProvider(TransformProvider source, Func<ControllerContext, T> selector)
         {
+            this.selector = selector;
             this.source = source;
-
-            cache = new Dictionary<string, XslCompiledTransform>();
-
-            watchers = new Dictionary<string, FileSystemWatcher>();
-
-            this.watchForChanges = watchForChanges;
         }
 
         /// <summary>
-        /// Clear the current cache of all cached items.
+        /// Create a new instance of the <see cref="MemoryCachedTransformProvider{T}"/> class.
         /// </summary>
-        public void Clear()
-        {
-            @lock.EnterWriteLock();
-
-            try
-            {
-                cache.Clear();
-
-                foreach (var x in watchers.Select(y => y.Value))
-                {
-                    x.Dispose();
-                }
-
-                watchers.Clear();
-            }
-            finally
-            {
-                @lock.ExitWriteLock();
-            }
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing,
-        /// or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            foreach(var x in watchers.Select(x => x.Value))
-            {
-                x.Dispose();
-            }
-
-            @lock.Dispose();
-        }
-
-        void FileSystemWatcher_OnChanged(object sender, FileSystemEventArgs args)
-        {
-            @lock.EnterWriteLock();
-
-            try
-            {
-                watchers[args.FullPath].Dispose();
-
-                cache.Remove(args.FullPath);
-            }
-            finally
-            {
-                @lock.ExitWriteLock();
-            }
-        }
-
-        /// <summary>
-        /// Provision an XSL transform against a given filepath.
-        /// </summary>
-        /// <param name="filepath">
-        /// A filepath corresponding to an XSLT.
+        /// <param name="source">A transform provider to cache.</param>
+        /// <param name="selector">
+        /// A strategy for selecting a key of the specified type against a controller context.
         /// </param>
-        /// <returns>
-        /// An <see cref="XslCompiledTransform"/> object.
-        /// </returns>
-        public XslCompiledTransform GetTransform(string filepath)
+        public MemoryCachedTransformProvider(ITransformProvider source, Func<ControllerContext, T> selector)
         {
+            this.selector = selector;
+            this.source = source.GetTransform;
+        }
+
+        /// <summary>
+        /// Search for an <see cref="XslCompiledTransform"/> against a given controller context.
+        /// </summary>
+        /// <param name="context">A controller context.</param>
+        /// <returns>
+        /// The result of searching for an XSL transform.
+        /// </returns>
+        public Result GetTransform(ControllerContext context)
+        {
+            var key = selector.Invoke(context);
+
             @lock.EnterUpgradeableReadLock();
 
             try
             {
-                if (!cache.ContainsKey(filepath))
+                if (cachedResults.ContainsKey(key))
                 {
-                    @lock.EnterWriteLock();
-
-                    try
-                    {
-                        cache[filepath] = source.GetTransform(filepath);
-
-                        if(watchForChanges && File.Exists(filepath))
-                        {
-                            Watch(filepath);
-                        }
-                    }
-                    finally
-                    {
-                        @lock.ExitWriteLock();
-                    }
+                    return cachedResults[key];
                 }
 
-                return cache[filepath];
+                @lock.EnterWriteLock();
+
+                try
+                {
+                    var result = source.Invoke(context);
+
+                    if (result.HasTransform)
+                    {
+                        cachedResults[key] = result;
+                    }
+
+                    return result;
+                }
+                finally
+                {
+                    @lock.ExitWriteLock();
+                }
             }
             finally
             {
                 @lock.ExitUpgradeableReadLock();
             }
-        }
-
-        void Watch(string filepath)
-        {
-            var watcher = new FileSystemWatcher();
-
-            watcher.Changed += FileSystemWatcher_OnChanged;
-            watcher.Filter = Path.GetFileName(filepath);
-            watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Path = Path.GetDirectoryName(filepath);
-
-            watcher.EnableRaisingEvents = true;
-
-            watchers[filepath] = watcher;
         }
     }
 }

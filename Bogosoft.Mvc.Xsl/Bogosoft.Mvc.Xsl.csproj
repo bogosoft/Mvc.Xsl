@@ -92,6 +92,7 @@
     <Compile Include="LocalFileTransformProvider.cs" />
     <Compile Include="ICachedTransformProvider.cs" />
     <Compile Include="ITransformProvider.cs" />
+    <Compile Include="MemoryCachedTransformProvider.cs" />
     <Compile Include="ParameterizingViewEventArgs.cs" />
     <Compile Include="ParameterizingViewEventHandler.cs" />
     <Compile Include="PathFormatter.cs" />
