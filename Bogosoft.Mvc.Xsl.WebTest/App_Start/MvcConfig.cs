@@ -23,6 +23,12 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             get
             {
                 yield return new CssBundlingFilter(ToRelativeUri, ToPhysicalPath, ToBundledCssFilepath);
+                yield return new JavascriptBundlingFilter(
+                    ToRelativeUri,
+                    ToPhysicalPath,
+                    ToBundledJavascriptFilepath,
+                    "/html/body"
+                    );
             }
         }
 
@@ -85,6 +91,11 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             var hash = CryptoHashStrategy.MD5.Compute(uris).ToHexString();
 
             return Path.Combine(HttpRuntime.AppDomainAppPath, "content", "cached", $"{hash}.{extension}");
+        }
+
+        static string ToBundledJavascriptFilepath(IEnumerable<string> uris)
+        {
+            return ToBundledFilepath(uris, "js");
         }
 
         static string ToPhysicalPath(string uri)
