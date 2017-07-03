@@ -12,7 +12,4 @@
 		<title>$title$</title>
 		<version>$version$</version>
 	</metadata>
-	<files>
-		<file src="Views\*.xslt" target="Views" />
-	</files>
 </package>
