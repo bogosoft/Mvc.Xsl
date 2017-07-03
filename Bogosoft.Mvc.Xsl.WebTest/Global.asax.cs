@@ -13,7 +13,7 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            var infrastructure = MvcConfig.Configure().ToArray();
+            var infrastructure = ViewEnginesConfig.Configure().ToArray();
 
             DependencyResolver.SetResolver(ServicesConfig.GetDependencyResolver(infrastructure));
         }

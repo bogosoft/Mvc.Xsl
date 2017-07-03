@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace Bogosoft.Mvc.Xsl.WebTest
 {
-    static class MvcConfig
+    static class ViewEnginesConfig
     {
         static string BundledFilesCachePath => Path.Combine(ApplicationPath, "Content", "cached");
 

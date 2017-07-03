@@ -141,7 +141,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\MvcConfig.cs" />
+    <Compile Include="App_Start\ViewEnginesConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\ServicesConfig.cs" />
     <Compile Include="Controllers\CacheController.cs" />
