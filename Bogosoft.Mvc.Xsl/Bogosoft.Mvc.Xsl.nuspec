@@ -13,6 +13,6 @@
 		<version>$version$</version>
 	</metadata>
 	<files>
-		<file src="Templates\*.xslt" target="Views" />
+		<file src="Views\*.xslt" target="Views" />
 	</files>
 </package>

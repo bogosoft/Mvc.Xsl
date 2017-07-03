@@ -106,10 +106,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Templates\Base.xslt" />
-    <Content Include="Templates\Bootstrap.xslt" />
-    <Content Include="Templates\JQuery.xslt" />
-    <Content Include="Templates\Modeled.xslt" />
+    <Content Include="Views\Base.xslt" />
+    <Content Include="Views\Bootstrap.xslt" />
+    <Content Include="Views\JQuery.xslt" />
+    <Content Include="Views\Modeled.xslt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
