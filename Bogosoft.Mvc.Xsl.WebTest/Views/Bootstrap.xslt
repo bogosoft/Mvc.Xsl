@@ -7,6 +7,7 @@
 	<xsl:param name="bootstrap-js-path" select="'Scripts/bootstrap.min.js'" />
 	<!-- Structural Templates -->
 	<xsl:template match="/" mode="html.head.links">
+		<xsl:apply-imports />
 		<link href="{$bootstrap-css-path}" rel="stylesheet" />
 	</xsl:template>
 	<xsl:template match="/" mode="html.body.scripts">

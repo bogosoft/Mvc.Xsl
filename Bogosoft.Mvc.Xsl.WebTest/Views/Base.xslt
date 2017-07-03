@@ -42,7 +42,9 @@
 			<xsl:apply-templates select="." mode="html.head.title.text" />
 		</title>
 	</xsl:template>
-	<xsl:template match="/" mode="html.head.links" />
+	<xsl:template match="/" mode="html.head.links">
+		<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+	</xsl:template>
 	<xsl:template match="/" mode="html.head.scripts" />
 	<xsl:template match="/" mode="html.body.attributes" />
 	<xsl:template match="/" mode="html.body.container">
