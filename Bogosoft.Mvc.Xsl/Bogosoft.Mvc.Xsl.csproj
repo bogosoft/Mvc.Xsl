@@ -104,8 +104,12 @@
     <None Include="Bogosoft.Mvc.Xsl.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Content\" />
+    <Content Include="Templates\Base.xslt" />
+    <Content Include="Templates\Bootstrap.xslt" />
+    <Content Include="Templates\JQuery.xslt" />
+    <Content Include="Templates\Modeled.xslt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

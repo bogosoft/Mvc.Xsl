@@ -1,5 +1,5 @@
-<?xml version="1.0"?>
-<package >
+<?xml version="1.0" encoding="utf-8"?>
+<package>
 	<metadata>
 		<authors>$author$</authors>
 		<copyright>Copyright © 2017</copyright>
@@ -12,4 +12,7 @@
 		<title>$title$</title>
 		<version>$version$</version>
 	</metadata>
+	<files>
+		<file src="Templates\*.xslt" target="Views" />
+	</files>
 </package>
