@@ -8,5 +8,6 @@
 		<add key="Bogosoft.Mvc.Xsl.ClearViewEngines" value="true" xdt:Locator="Match(key)" xdt:Transform="InsertIfMissing" />
 		<add key="Bogosoft.Mvc.Xsl.Indent" value="  " xdt:Locator="Match(key)" xdt:Transform="InsertIfMissing" />
 		<add key="Bogosoft.Mvc.Xsl.LBreak" value="&#xA;" xdt:Locator="Match(key)" xdt:Transform="InsertIfMissing" />
+		<add key="Bogosoft.Mvc.Xsl.WatchForXsltChanges" value="true" xdt:Locator="Match(key)" xdt:Transform="InsertIfMissing" />
 	</appSettings>
 </configuration>

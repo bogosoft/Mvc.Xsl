@@ -161,12 +161,6 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             return Resolve(context, $"~/Views/{Controller(context)}/{Action(context)}.xslt");
         }
 
-        static IEnumerable<ITransformProvider> GetSourceTransformProviders()
-        {
-            yield return new LocalFileTransformProvider(GetViewLocation);
-            yield return new LocalFileTransformProvider(GetSharedViewLocation);
-        }
-
         static string Resolve(ControllerContext context, string path)
         {
             return context.HttpContext.Server.MapPath(path);
