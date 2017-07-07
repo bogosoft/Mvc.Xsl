@@ -5,7 +5,7 @@ using System.Xml.Xsl;
 namespace Bogosoft.Mvc.Xsl
 {
     /// <summary>
-    /// A filesystem-based implementation of the <see cref="ITransformProvider"/> contract.
+    /// A local filesystem-based implementation of the <see cref="ITransformProvider"/> contract.
     /// </summary>
     public sealed class LocalFileTransformProvider : ITransformProvider
     {
