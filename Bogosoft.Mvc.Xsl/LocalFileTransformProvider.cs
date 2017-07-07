@@ -7,9 +7,12 @@ namespace Bogosoft.Mvc.Xsl
     /// <summary>
     /// A local filesystem-based implementation of the <see cref="ITransformProvider"/> contract.
     /// </summary>
-    public sealed class LocalFileTransformProvider : ITransformProvider
+    public class LocalFileTransformProvider : ITransformProvider
     {
-        PathFormatter formatter;
+        /// <summary>
+        /// Get or set a filepath formatter associated with the current transform provider.
+        /// </summary>
+        protected PathFormatter Formatter;
 
         /// <summary>
         /// Create a new instance of the <see cref="LocalFileTransformProvider"/> class.
@@ -19,7 +22,7 @@ namespace Bogosoft.Mvc.Xsl
         /// </param>
         public LocalFileTransformProvider(PathFormatter formatter)
         {
-            this.formatter = formatter;
+            Formatter = formatter;
         }
 
         /// <summary>
@@ -29,9 +32,9 @@ namespace Bogosoft.Mvc.Xsl
         /// <returns>
         /// The result of searching for an XSL transform.
         /// </returns>
-        public TransformSearchResult GetTransform(ControllerContext context)
+        public virtual TransformSearchResult GetTransform(ControllerContext context)
         {
-            var filepath = formatter.Invoke(context);
+            var filepath = Formatter.Invoke(context);
 
             XslCompiledTransform transform = null;
 
