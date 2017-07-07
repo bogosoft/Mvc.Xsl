@@ -144,7 +144,6 @@
     <Compile Include="App_Start\ViewEnginesConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\ServicesConfig.cs" />
-    <Compile Include="Controllers\CacheController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -24,7 +24,8 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             CacheLocalTransforms,
             ClearViewEngines,
             Indent,
-            LBreak
+            LBreak,
+            WatchForXsltChanges
         }
 
         class Setting
@@ -115,25 +116,22 @@ namespace Bogosoft.Mvc.Xsl.WebTest
         {
             get
             {
-                yield return new LocalFileTransformProvider(LocalViewPathFormatter).GetTransform;
-                yield return new LocalFileTransformProvider(LocalSharedViewPathFormatter).GetTransform;
-            }
-        }
-
-        static ITransformProvider TransformProvider
-        {
-            get
-            {
-                ITransformProvider provider = new CompositeTransformProvider(SourceTransformProviders);
-
                 if (Setting.IsTrue(Key.CacheLocalTransforms))
                 {
-                    provider = new MemoryCachedTransformProvider<string>(provider, AbsolutePathSelector);
-                }
+                    var watch = Setting.IsTrue(Key.WatchForXsltChanges);
 
-                return provider;
+                    yield return new CachedLocalFileTransformProvider(GetViewLocation, watch).GetTransform;
+                    yield return new CachedLocalFileTransformProvider(GetSharedViewLocation, watch).GetTransform;
+                }
+                else
+                {
+                    yield return new LocalFileTransformProvider(GetViewLocation).GetTransform;
+                    yield return new LocalFileTransformProvider(GetSharedViewLocation).GetTransform;
+                }
             }
         }
+
+        static ITransformProvider TransformProvider => new CompositeTransformProvider(SourceTransformProviders);
 
         static string AbsolutePathSelector(ControllerContext context)
         {
@@ -153,20 +151,20 @@ namespace Bogosoft.Mvc.Xsl.WebTest
             return context.RouteData.Values["controller"] as string;
         }
 
-        static string LocalSharedViewPathFormatter(ControllerContext context)
+        static string GetSharedViewLocation(ControllerContext context)
         {
             return Resolve(context, $"~/Views/Shared/{Action(context)}.xslt");
         }
 
-        static string LocalViewPathFormatter(ControllerContext context)
+        static string GetViewLocation(ControllerContext context)
         {
             return Resolve(context, $"~/Views/{Controller(context)}/{Action(context)}.xslt");
         }
 
         static IEnumerable<ITransformProvider> GetSourceTransformProviders()
         {
-            yield return new LocalFileTransformProvider(LocalViewPathFormatter);
-            yield return new LocalFileTransformProvider(LocalSharedViewPathFormatter);
+            yield return new LocalFileTransformProvider(GetViewLocation);
+            yield return new LocalFileTransformProvider(GetSharedViewLocation);
         }
 
         static string Resolve(ControllerContext context, string path)
