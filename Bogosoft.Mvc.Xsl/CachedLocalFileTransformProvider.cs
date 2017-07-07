@@ -47,7 +47,7 @@ namespace Bogosoft.Mvc.Xsl
 
         void FileSystemWatcher_Changed(object sender, FileSystemEventArgs args)
         {
-            @lock.EnterReadLock();
+            @lock.EnterUpgradeableReadLock();
 
             try
             {
@@ -101,16 +101,18 @@ namespace Bogosoft.Mvc.Xsl
                     {
                         cachedResults[filepath] = result;
 
-                        var directory = Path.GetDirectoryName(filepath);
-                        var filename = Path.GetFileName(filepath);
-
                         if (respondToSourceChanges && !watchers.ContainsKey(filepath))
                         {
-                            var watcher = new FileSystemWatcher(directory, filename);
+                            var watcher = new FileSystemWatcher();
 
                             watcher.Changed += FileSystemWatcher_Changed;
+                            watcher.Filter = Path.GetFileName(filepath);
+                            watcher.NotifyFilter = NotifyFilters.LastWrite;
+                            watcher.Path = Path.GetDirectoryName(filepath);
 
                             watcher.EnableRaisingEvents = true;
+
+                            watchers[filepath] = watcher;
                         }
                     }
 
