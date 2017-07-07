@@ -1,9 +1,7 @@
 ﻿using Bogosoft.Xml;
 using Bogosoft.Xml.Xhtml5;
 using System.Collections.Generic;
-using System.IO;
 using System.Web.Mvc;
-using System.Xml.Xsl;
 
 namespace Bogosoft.Mvc.Xsl
 {
@@ -45,6 +43,24 @@ namespace Bogosoft.Mvc.Xsl
         static string GetViewLocation(ControllerContext context)
         {
             return context.MapPath($"~/Views/{context.GetController()}/{context.GetAction()}.xslt");
+        }
+
+        /// <summary>
+        /// Get a new <see cref="XsltViewEngine"/> with default settings. Views will be searched for by standard
+        /// MVC convention, i.e. within the Views folder, and with a file extension of xslt. Output will be formatted
+        /// with an <see cref="Xhtml5Formatter"/> on render.
+        /// </summary>
+        /// <param name="filters">
+        /// A collection of filters to apply to an XHTML5 document before rendering to output.
+        /// </param>
+        /// <returns>
+        /// An XSLT view engine.
+        /// </returns>
+        public static XsltViewEngine UseDefaultWithFilters(IEnumerable<AsyncXmlFilter> filters)
+        {
+            var formatter = new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" }.With(filters);
+
+            return new XsltViewEngine(DefaultTransformProvider, formatter);
         }
 
         /// <summary>
