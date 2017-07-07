@@ -1,4 +1,5 @@
 ﻿using Bogosoft.Xml;
+using Bogosoft.Xml.Xhtml5;
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
@@ -7,10 +8,35 @@ using System.Xml.Xsl;
 namespace Bogosoft.Mvc.Xsl
 {
     /// <summary>
-    /// An implementation of <see cref="IViewEngine"/> that uses XSLT to render model projections.
+    /// An implementation of <see cref="IViewEngine"/> that uses XSLT stylesheets to render model projections.
     /// </summary>
     public class XsltViewEngine : IViewEngine
     {
+        /// <summary>
+        /// Get a new <see cref="XsltViewEngine"/> with default settings. Views will be searched for by standard
+        /// MVC convention, i.e. within the Views folder, and with a file extension of xslt. Output will be formatted
+        /// with an <see cref="Xhtml5Formatter"/> on render.
+        /// </summary>
+        public static XsltViewEngine Default => new XsltViewEngine(DefaultTransformProvider, DefaultFormatter);
+
+        static XmlFormatterAsync DefaultFormatter
+        {
+            get { return new Xhtml5Formatter { Indent = "\t", LBreak = "\r\n" }.FormatAsync; }
+        }
+
+        static TransformProvider DefaultTransformProvider
+        {
+            get
+            {
+                var providers = new List<TransformProvider>();
+
+                providers.Add(new CachedLocalFileTransformProvider(GetViewLocation).GetTransform);
+                providers.Add(new CachedLocalFileTransformProvider(GetSharedViewLocation).GetTransform);
+
+                return new CompositeTransformProvider(providers).GetTransform;
+            }
+        }
+
         const string DefaultLocationTemplate = "~/Views/{1}/{2}.xslt";
 
         static IEnumerable<TransformProvider> TransformDefaultLocations
@@ -20,6 +46,16 @@ namespace Bogosoft.Mvc.Xsl
                 yield return GetTransformFromSpecificLocation;
                 yield return GetTransformFromSharedLocation;
             }
+        }
+
+        static string GetSharedViewLocation(ControllerContext context)
+        {
+            return context.MapPath($"~/Views/Shared/{context.GetAction()}.xslt");
+        }
+
+        static string GetViewLocation(ControllerContext context)
+        {
+            return context.MapPath($"~/Views/{context.GetController()}/{context.GetAction()}.xslt");
         }
 
         static TransformSearchResult GetTransformFromSharedLocation(ControllerContext context)

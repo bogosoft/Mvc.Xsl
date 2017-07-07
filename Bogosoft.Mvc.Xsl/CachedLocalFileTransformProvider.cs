@@ -27,7 +27,7 @@ namespace Bogosoft.Mvc.Xsl
         /// A value indicating whether or not changes to XSLT files should be watched for
         /// so that cached transforms do not become stale.
         /// </param>
-        public CachedLocalFileTransformProvider(PathFormatter formatter, bool respondToSourceChanges)
+        public CachedLocalFileTransformProvider(PathFormatter formatter, bool respondToSourceChanges = true)
             : base(formatter)
         {
             this.respondToSourceChanges = respondToSourceChanges;
