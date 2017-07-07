@@ -37,17 +37,6 @@ namespace Bogosoft.Mvc.Xsl
             }
         }
 
-        const string DefaultLocationTemplate = "~/Views/{1}/{2}.xslt";
-
-        static IEnumerable<TransformProvider> TransformDefaultLocations
-        {
-            get
-            {
-                yield return GetTransformFromSpecificLocation;
-                yield return GetTransformFromSharedLocation;
-            }
-        }
-
         static string GetSharedViewLocation(ControllerContext context)
         {
             return context.MapPath($"~/Views/Shared/{context.GetAction()}.xslt");
@@ -56,38 +45,6 @@ namespace Bogosoft.Mvc.Xsl
         static string GetViewLocation(ControllerContext context)
         {
             return context.MapPath($"~/Views/{context.GetController()}/{context.GetAction()}.xslt");
-        }
-
-        static TransformSearchResult GetTransformFromSharedLocation(ControllerContext context)
-        {
-            var filepath = context.MapPath($"~/Views/Shared/{context.GetAction()}.xslt");
-
-            XslCompiledTransform transform = null;
-
-            if (File.Exists(filepath))
-            {
-                transform = new XslCompiledTransform();
-
-                transform.Load(filepath);
-            }
-
-            return new TransformSearchResult(filepath, transform);
-        }
-
-        static TransformSearchResult GetTransformFromSpecificLocation(ControllerContext context)
-        {
-            var filepath = context.MapPath($"~/Views/{context.GetController()}/{context.GetAction()}.xslt");
-
-            XslCompiledTransform transform = null;
-
-            if (File.Exists(filepath))
-            {
-                transform = new XslCompiledTransform();
-
-                transform.Load(filepath);
-            }
-
-            return new TransformSearchResult(filepath, transform);
         }
 
         /// <summary>
@@ -110,16 +67,6 @@ namespace Bogosoft.Mvc.Xsl
         /// are handed off to a newly created <see cref="IView"/> object.
         /// </summary>
         public event ParameterizingViewEventHandler ParameterizingView;
-
-        /// <summary>
-        /// Create a new instance of the <see cref="XsltViewEngine"/> class. View resolution will follows the
-        /// standard MVC convention of looking for files in the Views folder. The only exception is that files
-        /// are expected to have a .xslt extension.
-        /// </summary>
-        public XsltViewEngine()
-            : this(new CompositeTransformProvider(TransformDefaultLocations), (XmlFormatterAsync)null, null)
-        {
-        }
 
         /// <summary>
         /// Create a new instance of the <see cref="XsltViewEngine"/> class.
